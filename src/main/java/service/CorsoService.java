@@ -10,6 +10,6 @@ public interface CorsoService {
 	List<Corso> getCorsi();
 	void addCorso(Corso c, Professore p);
 	void deleteCorsoById(int idCorso);
-	Professore findByJoin(int matricola);
+//	Professore findByJoin(int matricola);
 	void close();
 }

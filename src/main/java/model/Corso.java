@@ -4,15 +4,14 @@ public class Corso {
 	
 	private int idCorso;
 	private String materia;
-	private int cattedraId;
 	private Professore professore;
 	
 	public Corso() {}
-	public Corso(int idCorso, String materia, int cattedraId) {
+	public Corso(int idCorso, String materia, Professore professore) {
 		super();
 		this.idCorso = idCorso;
 		this.materia = materia;
-		this.cattedraId = cattedraId;
+		this.professore = professore;
 	}
 	
 	public Professore getProfessore() {
@@ -33,15 +32,9 @@ public class Corso {
 	public void setMateria(String materia) {
 		this.materia = materia;
 	}
-	public int getCattedraId() {
-		return cattedraId;
-	}
-	public void setCattedraId(int cattedraId) {
-		this.cattedraId = cattedraId;
-	}
 	@Override
 	public String toString() {
-		return "Corso [materia=" + materia + ", cattedraId=" + cattedraId + "]";
+		return "Corso [materia=" + materia + ", professore=" + professore + "]";
 	}
 	
 }

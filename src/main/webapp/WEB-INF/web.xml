@@ -29,4 +29,14 @@
     <servlet-name>CorsoCtrl</servlet-name>
     <url-pattern>/CorsoCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AppelloCtrl</display-name>
+    <servlet-name>AppelloCtrl</servlet-name>
+    <servlet-class>presentation.AppelloCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AppelloCtrl</servlet-name>
+    <url-pattern>/AppelloCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

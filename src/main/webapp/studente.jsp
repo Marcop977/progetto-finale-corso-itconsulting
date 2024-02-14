@@ -73,7 +73,8 @@
           <tr>
             <th scope="row"><%= c.getIdCorso() %></th>
             <td><%= c.getMateria() %></td>
-            
+            <td><%= c.getProfessore().getNome() %></td>
+            <td><%= c.getProfessore().getCognome() %></td>
           </tr>
           <% } %>
         </tbody>
@@ -81,7 +82,29 @@
     </div>
 
 
-
+	<!-- prenotazione -->
+    <div class="container text-end">
+      <form action="appello" method="post">
+        <label for="" class="d-block"
+          >Inserisci l'appello che vuoi visualizzare:</label
+        >
+        <div class="d-flex justify-content-end mt-2">
+          <div class="input-group mb-3 w-25">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Inserisci appello"
+              name="materia"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-outline-primary" type="submit">
+                Vai
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
 
 
 

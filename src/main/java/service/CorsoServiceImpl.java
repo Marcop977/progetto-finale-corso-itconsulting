@@ -31,9 +31,9 @@ public class CorsoServiceImpl implements CorsoService {
 		this.dao.closeConnection();
 	}
 
-	@Override
-	public Professore findByJoin(int matricola) {
-		return this.dao.findProfJoin(matricola);
-	}
+//	@Override
+//	public Professore findByJoin(int matricola) {
+//		return this.dao.findProfJoin(matricola);
+//	}
 
 }

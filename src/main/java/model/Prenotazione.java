@@ -2,12 +2,22 @@ package model;
 
 public class Prenotazione {
 	
+	private int idPrenotazione;
 	private Studente studPrenotato;
 	private Appello appPrenotato;
-	public Prenotazione(Studente studPrenotato, Appello appPrenotato) {
+	
+	public Prenotazione(int idPrenotazione, Studente studPrenotato, Appello appPrenotato) {
 		super();
+		this.idPrenotazione = idPrenotazione;
 		this.studPrenotato = studPrenotato;
 		this.appPrenotato = appPrenotato;
+	}
+	
+	public int getIdPrenotazione() {
+		return idPrenotazione;
+	}
+	public void setIdPrenotazione(int idPrenotazione) {
+		this.idPrenotazione = idPrenotazione;
 	}
 	public Studente getStudPrenotato() {
 		return studPrenotato;

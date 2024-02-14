@@ -8,7 +8,6 @@ import java.util.List;
 
 import model.Corso;
 import model.Professore;
-import model.Studente;
 
 public class CorsoDAOImpl implements CorsoDAO {
 	
@@ -24,10 +23,8 @@ public class CorsoDAOImpl implements CorsoDAO {
 
 		try {
 			System.out.println("Esecuzione della query: " + FIND_ALL);
-
 			this.ps = this.db.getConnessione().prepareStatement(FIND_ALL);
 			this.rs = ps.executeQuery();
-			
 			while (rs.next()) {
 				int idCorso = rs.getInt(1);
 				String materia = rs.getString("materia");
@@ -35,13 +32,21 @@ public class CorsoDAOImpl implements CorsoDAO {
 				
 				System.out.println("ID corso: " + idCorso + ", Materia: " + materia + ", ID cattedra: " + cattedraId);
 
-				
-				Professore p = findProfJoin(cattedraId); //a causa di questa riga di codice, mi stampa solo 1 record. Se la commento mi ridà tutti i corsi
+//				Professore p = findProfJoin(cattedraId); //a causa di questa riga di codice, mi stampa solo 1 record. Implemento quindi la funzione direttamente in questo metodo
+				Professore p = new Professore();
+				this.ps1 = this.db.getConnessione().prepareStatement(FIND_PROF_JOIN);
+				this.ps1.setInt(1, cattedraId);
+				this.rs1 = ps1.executeQuery();
+				this.rs1.next();
+				String nome = rs1.getString("nome");
+				String cognome = rs1.getString("cognome");
+				p.setNome(nome);
+				p.setCognome(cognome);
+				System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
 
 				Corso c = new Corso();
 				c.setIdCorso(idCorso);
 				c.setMateria(materia);
-				c.setCattedraId(cattedraId);
 				c.setProfessore(p);
 				corsi.add(c);
 				System.out.println(cattedraId);
@@ -55,7 +60,7 @@ public class CorsoDAOImpl implements CorsoDAO {
 	}
 
 	@Override
-	public Studente findById(int idCorso) {
+	public Corso findById(int idCorso) {
 		return null;
 	}
 
@@ -102,27 +107,27 @@ public class CorsoDAOImpl implements CorsoDAO {
 
 	}
 
-	@Override
-	public Professore findProfJoin(int matricola) {
-		Professore p = new Professore();
-		
-		try {
-			this.ps1 = this.db.getConnessione().prepareStatement(FIND_PROF_JOIN);
-			this.ps1.setInt(1, matricola);
-			this.rs1 = ps1.executeQuery();
-			this.rs1.next();
-			String nome = rs1.getString("nome");
-			String cognome = rs1.getString("cognome");
-			p.setNome(nome);
-			p.setCognome(cognome);
-			System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
-
-						
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return p;
-	}
+//	@Override
+//	public Professore findProfJoin(int matricola) {
+//		Professore p = new Professore();
+//		
+//		try {
+//			this.ps1 = this.db.getConnessione().prepareStatement(FIND_PROF_JOIN);
+//			this.ps1.setInt(1, matricola);
+//			this.rs1 = ps1.executeQuery();
+//			this.rs1.next();
+//			String nome = rs1.getString("nome");
+//			String cognome = rs1.getString("cognome");
+//			p.setNome(nome);
+//			p.setCognome(cognome);
+//			System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
+//
+//						
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return p;
+//	}
 
 }
