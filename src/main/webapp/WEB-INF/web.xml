@@ -39,4 +39,14 @@
     <servlet-name>AppelloCtrl</servlet-name>
     <url-pattern>/AppelloCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PrenotazioneCtrl</display-name>
+    <servlet-name>PrenotazioneCtrl</servlet-name>
+    <servlet-class>presentation.PrenotazioneCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PrenotazioneCtrl</servlet-name>
+    <url-pattern>/PrenotazioneCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

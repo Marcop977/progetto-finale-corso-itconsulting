@@ -13,6 +13,10 @@ public class Prenotazione {
 		this.appPrenotato = appPrenotato;
 	}
 	
+	public Prenotazione() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getIdPrenotazione() {
 		return idPrenotazione;
 	}

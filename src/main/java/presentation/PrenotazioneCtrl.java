@@ -5,46 +5,46 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Appello;
+import model.Prenotazione;
 
 import java.io.IOException;
 import java.util.List;
 
-import service.AppelloService;
-import service.AppelloServiceImpl;
+import service.PrenotazioneService;
+import service.PrenotazioneServiceImpl;
 
-@WebServlet("/appello")
-public class AppelloCtrl extends HttpServlet {
+@WebServlet("/prenota")
+public class PrenotazioneCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	AppelloService service = new AppelloServiceImpl();
+	PrenotazioneService service = new PrenotazioneServiceImpl();
+       
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("studente.jsp").forward(request, response);
+		request.getRequestDispatcher("prenotazione.jsp").forward(request, response);
 	}
 
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setAttribute("mostraSecondaTabella", true);
-		
-		String materia = request.getParameter("materia");
+		String idAppello = request.getParameter("appello");
 		
 		boolean trovato = false;
 		
-		if (materia != null) {
-			for (Appello a : service.getAppelli()) {
-				if (a.getIdAppello() == Integer.parseInt(materia)) {
+		if (idAppello != null) {
+			for (Prenotazione p : service.getPrenotazioni()) {
+				if (p.getIdPrenotazione() == Integer.parseInt(idAppello)) {
 					trovato = true;
 					break;
 				}
 			}
 		}
 		
-		if (trovato)
+		if (trovato)		
 			doGet(request, response);
 	}
-
-	public List<Appello> mostraAppelli(){
-		return service.getAppelli();
+	
+	public List<Prenotazione> mostraPrenotazioni(){
+		return service.getPrenotazioni();
 	}
+
 }

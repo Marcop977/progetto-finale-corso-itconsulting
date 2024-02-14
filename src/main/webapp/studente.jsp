@@ -1,9 +1,11 @@
+<%@page import="model.Appello"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="presentation.AddStudenteCtrl" %>
 <%@ page import="presentation.CorsoCtrl" %>
 <%@ page import="model.Corso" %>
+<%@page import="presentation.AppelloCtrl" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +25,9 @@
   <% AddStudenteCtrl studCtrl = new AddStudenteCtrl();
   CorsoCtrl corsoCtrl = new CorsoCtrl();
   int matricola = (int) session.getAttribute("matricola");
-  	%>
+  AppelloCtrl controller = new AppelloCtrl();
+  boolean mostraSecondaTabella = request.getAttribute("mostraSecondaTabella") != null && (boolean) request.getAttribute("mostraSecondaTabella");
+  %>
   
     <!-- navbar -->
     <div class="container mt-5">
@@ -56,63 +60,123 @@
     </div>
 
    <!-- tabella corsi -->
-    <div class="container my-5">
-      <h3 class="mb-3">Ciao <%=matricola %> - qui i corsi:</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">ID corso</th>
-            <th scope="col">Materia</th>
-            <th scope="col">Nome docente</th>
-            <th scope="col">Cognome docente</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for (Corso c : corsoCtrl.mostraCorsi()) { 
-          %>
-          <tr>
-            <th scope="row"><%= c.getIdCorso() %></th>
-            <td><%= c.getMateria() %></td>
-            <td><%= c.getProfessore().getNome() %></td>
-            <td><%= c.getProfessore().getCognome() %></td>
-          </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
-
+   <div <% if (mostraSecondaTabella) out.print("style=\"display:none;\""); %>> <!-- se mostraSecondaTabella è vera, nascondi la prima (cioè questa) -->
+	    <div class="container my-5">
+	      <h3 class="mb-3">Ciao <%=matricola %> - qui i corsi:</h3>
+	      <table class="table">
+	        <thead>
+	          <tr>
+	            <th scope="col">ID corso</th>
+	            <th scope="col">Materia</th>
+	            <th scope="col">Nome docente</th>
+	            <th scope="col">Cognome docente</th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <% for (Corso c : corsoCtrl.mostraCorsi()) { 
+	          %>
+	          <tr>
+	            <th scope="row"><%= c.getIdCorso() %></th>
+	            <td><%= c.getMateria() %></td>
+	            <td><%= c.getProfessore().getNome() %></td>
+	            <td><%= c.getProfessore().getCognome() %></td>
+	          </tr>
+	          <% } %>
+	        </tbody>
+	      </table>
+	    </div>
+	
 
 	<!-- prenotazione -->
-    <div class="container text-end">
-      <form action="appello" method="post">
-        <label for="" class="d-block"
-          >Inserisci l'appello che vuoi visualizzare:</label
-        >
-        <div class="d-flex justify-content-end mt-2">
-          <div class="input-group mb-3 w-25">
-            <input
-              type="number"
-              class="form-control"
-              placeholder="Inserisci appello"
-              name="materia"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-outline-primary" type="submit">
-                Vai
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+	    <div class="container text-end">
+	      <form action="appello" method="post">
+	        <label for="" class="d-block"
+	          >Inserisci l'appello che vuoi visualizzare:</label
+	        >
+	        <div class="d-flex justify-content-end mt-2">
+	          <div class="input-group mb-3 w-25">
+	            <input
+	              type="number"
+	              class="form-control"
+	              placeholder="Inserisci appello"
+	              name="materia"
+	            />
+	            <div class="input-group-append">
+	              <button class="btn btn-outline-primary" type="submit">
+	                Vai
+	              </button>
+	            </div>
+	          </div>
+	        </div>
+	      </form>
+	    </div>
+	</div>
+	
+	
+			  
+		  
+		  
+		<!-- appelli disponibili -->
+	    <div <% if (!mostraSecondaTabella) out.print("style=\"display:none;\""); %>> <!-- se mostraSecondaTabella è falsa, nascondila -->
+		    <div class="container my-5">
+				<% for (Appello a : controller.mostraAppelli()) { %>
+		      <h3 class="mb-3">
+		        Per l'esame di <span class="text-decoration-underline"><%= a.getCorsoId().getMateria()%></span> sono disponibili i seguenti appelli:
+		      </h3>
+		      <table class="table">
+		        <thead>
+		          <tr>
+		            <th scope="col">ID Appello</th>
+		            <th scope="col">Data</th>
+		            <th scope="col">Materia</th>
+		            <th scope="col">Docente</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		          <tr>
+		            <th scope="row"><%= a.getIdAppello() %></th>
+		            <td><%= a.getData() %></th>
+		            <td><%= a.getCorsoId().getMateria() %></th>
+		            <td><%= a.getCorsoId().getProfessore().getNome() + " " + a.getCorsoId().getProfessore().getCognome()%></td>
+		          </tr>
+				<% } %>
+		        </tbody>
+		      </table>
+		    </div>
+		    
+			<!-- Prenota -->
+		    <div class="container text-end">
+		      <form action="prenota" method="post">
+		        <label for="" class="d-block"
+		          >Inserisci la prenotazione che vuoi effettuare:</label
+		        >
+		        <div class="d-flex justify-content-end mt-2">
+		          <div class="input-group mb-3 w-25">
+		            <input
+		              type="number"
+		              class="form-control"
+		              placeholder="Inserisci prenotazione"
+		              name="appello"
+		            />
+		            <div class="input-group-append">
+		              <button class="btn btn-outline-primary" type="submit">
+		                Prenota
+		              </button>
+		            </div>
+		          </div>
+		        </div>
+		      </form>
+		    </div>
+		
+		</div>		
+	
+	
+	
+	
+	
+	
 
-
-
-
-
-
-
-<!-- Footer -->
+	<!-- Footer -->
     <footer
       class="text-center text-lg-start bg-light text-muted footer fixed-bottom"
     >
