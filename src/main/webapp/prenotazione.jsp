@@ -21,10 +21,12 @@
   </head>
   <body>
 
-<% PrenotazioneCtrl controller = new PrenotazioneCtrl(); %>
+<% PrenotazioneCtrl controller = new PrenotazioneCtrl(); 
+Prenotazione p = (Prenotazione) request.getAttribute("prenotazione"); 
+out.print(p); %>
 
 			<div class="container my-5">
-				<% for (Prenotazione p : controller.mostraPrenotazioni()) { %>
+			
 		      <h3 class="mb-3">
 		        
 		      </h3>
@@ -44,7 +46,7 @@
 		            <td><%= p.getAppPrenotato().getCorsoId().getMateria() %></th>
 		            <td><%= p.getStudPrenotato().getNome() + " " + p.getStudPrenotato().getCognome()%></td>
 		          </tr>
-				<% } %>
+
 		        </tbody>
 		      </table>
 		    </div>

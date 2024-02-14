@@ -6,6 +6,7 @@
 <%@ page import="presentation.CorsoCtrl" %>
 <%@ page import="model.Corso" %>
 <%@page import="presentation.AppelloCtrl" %>
+<%@page import="model.Studente" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +25,7 @@
   
   <% AddStudenteCtrl studCtrl = new AddStudenteCtrl();
   CorsoCtrl corsoCtrl = new CorsoCtrl();
-  int matricola = (int) session.getAttribute("matricola");
+  Studente s = (Studente) session.getAttribute("studente");
   AppelloCtrl controller = new AppelloCtrl();
   boolean mostraSecondaTabella = request.getAttribute("mostraSecondaTabella") != null && (boolean) request.getAttribute("mostraSecondaTabella");
   %>
@@ -62,7 +63,7 @@
    <!-- tabella corsi -->
    <div <% if (mostraSecondaTabella) out.print("style=\"display:none;\""); %>> <!-- se mostraSecondaTabella è vera, nascondi la prima (cioè questa) -->
 	    <div class="container my-5">
-	      <h3 class="mb-3">Ciao <%=matricola %> - qui i corsi:</h3>
+	      <h3 class="mb-3">Ciao <%= s.getNome() %> - qui i corsi:</h3>
 	      <table class="table">
 	        <thead>
 	          <tr>

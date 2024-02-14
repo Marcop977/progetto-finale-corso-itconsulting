@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 		for (Studente s : service.getStudenti()) {
 			if (s.getUsername().equals(username) && s.getPassword().equals(password)) {
 				session = request.getSession(true);
-				session.setAttribute("matricola", s.getMatricola());
+				session.setAttribute("studente", s);
 				trovato = true;
 				break;
 			}

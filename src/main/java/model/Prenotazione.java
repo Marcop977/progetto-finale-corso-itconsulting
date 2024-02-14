@@ -37,7 +37,7 @@ public class Prenotazione {
 	}
 	@Override
 	public String toString() {
-		return "Prenotazione [studPrenotato=" + studPrenotato + ", appPrenotato=" + appPrenotato + "]";
+		return "Prenotazione [id=" + idPrenotazione + "studPrenotato=" + studPrenotato + ", appPrenotato=" + appPrenotato + "]";
 	}
 	
 }
