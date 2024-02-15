@@ -34,7 +34,8 @@ public class Corso {
 	}
 	@Override
 	public String toString() {
-		return "Corso [materia=" + materia + ", professore=" + professore + "]";
+		return "Corso [idCorso=" + idCorso + ", materia=" + materia + ", professore=" + professore + "]";
 	}
+
 	
 }

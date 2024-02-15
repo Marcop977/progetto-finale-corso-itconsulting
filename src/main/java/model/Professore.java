@@ -59,11 +59,11 @@ public class Professore {
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
+
 	@Override
 	public String toString() {
-		return "Professore [username=" + username + ", password=" + password + ", tipoUtente=" + tipoUtente + ", nome="
-				+ nome + ", cognome=" + cognome + "]";
+		return "Professore [idProfessore=" + idProfessore + ", username=" + username + ", password=" + password
+				+ ", tipoUtente=" + tipoUtente + ", nome=" + nome + ", cognome=" + cognome + "]";
 	}
-	
 
 }

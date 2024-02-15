@@ -11,6 +11,8 @@ import model.Appello;
 import model.Corso;
 import model.Professore;
 
+import model.Corso;
+
 public class AppelloDAOImpl implements AppelloDAO {
 	
 	Connessione db = new Connessione();
@@ -31,34 +33,13 @@ public class AppelloDAOImpl implements AppelloDAO {
 			
 			while (rs.next()) {
 				int idAppello = rs.getInt(1);
-				Date data = rs.getDate("data");
-				int corsoId = rs.getInt("materia"); // materia (foreign key)
-				
-				
-				Professore p = new Professore();
-				this.ps1 = this.db.getConnessione().prepareStatement(FIND_CORSO_JOIN); //dalla query ottengo il professore
-				this.ps1.setInt(1, corsoId);
-				this.rs1 = ps1.executeQuery();
-				this.rs1.next();
-				String nome = rs1.getString("nome");
-				String cognome = rs1.getString("cognome");
-				p.setNome(nome);
-				p.setCognome(cognome);
-				System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
-			
-				Corso c = new Corso();
-				this.ps1 = this.db.getConnessione().prepareStatement(FIND_CORSO_JOIN); //dalla stessa query ottengo anche le proprietà della materia
-				this.ps1.setInt(1, corsoId); //mi servono le proprietà del corso di quell'appello
-				this.rs1 = ps1.executeQuery();
-				this.rs1.next();
-				String nomeMateria = this.rs1.getString("materia"); // materia (nome corso)
-				c.setMateria(nomeMateria);
-				c.setProfessore(p);		//aggiungo il professore al corso, in modo tale da poter accedere alle sue proprietà
+				Date data = rs.getDate(2);
+				Corso c = (Corso) rs.getObject(3);
 				
 				Appello a = new Appello();
 				a.setIdAppello(idAppello);
 				a.setData(data);
-				a.setCorsoId(c);		//aggiungo il corso all'appello, in modo tale da poter accedere alle sue proprietà
+				a.setCorsoId(c);
 				
 				appelli.add(a);
 				
@@ -101,6 +82,90 @@ public class AppelloDAOImpl implements AppelloDAO {
 	public void closeConnection() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<Appello> findAppById(int idAppello) {
+		List<Appello> appelli = new ArrayList<>();
+		
+		try {
+			this.ps1 = db.getConnessione().prepareStatement(FIND_BY_ID);
+			this.ps1.setInt(1, idAppello);
+			this.rs1 = ps1.executeQuery();
+			
+			while (rs1.next()) {
+				int idCorso = rs1.getInt(2);
+				String nomeMateria = rs1.getString(1);
+				int idProfessore = rs1.getInt(5);
+				String nomeProf = rs1.getString(3);
+				String cognomeProf = rs1.getString(4);
+				String username = rs1.getString(6);
+				String password = rs1.getString(7);
+				Date data = rs1.getDate(8);
+				int idAppelloDB = rs1.getInt(9);  //potevo anche prenderlo dal parametro, ma forse così è meglio
+				
+				Professore p = new Professore();
+				p.setIdProfessore(idProfessore);
+				p.setNome(nomeProf);
+				p.setCognome(cognomeProf);
+				p.setUsername(username);
+				p.setPassword(password);
+				
+				Corso c = new Corso();
+				c.setIdCorso(idCorso);
+				c.setMateria(nomeMateria);
+				c.setProfessore(p);
+				
+				Appello a = new Appello();
+				a.setIdAppello(idAppelloDB);
+				a.setCorsoId(c);
+				a.setData(data);
+				
+				appelli.add(a);
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return appelli;
+	}
+	
+	@Override
+	public List<Appello> findByProf(Professore p) {
+		List<Appello> appelli = new ArrayList<>();
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(FIND_BY_PROF);
+			this.ps.setInt(1, p.getIdProfessore());
+			this.rs = this.ps.executeQuery();
+			
+			while (rs.next()) {
+				int idCorso = this.rs.getInt(1);
+				String nomeMateria = this.rs.getString(2);
+				int idAppello = this.rs.getInt(3);
+				Date data = this.rs.getDate(4);
+				
+				Corso c = new Corso();
+				c.setIdCorso(idCorso);
+				c.setMateria(nomeMateria);
+				c.setProfessore(p);
+				
+				Appello a = new Appello();
+				a.setCorsoId(c);
+				a.setData(data);
+				a.setIdAppello(idAppello);
+				
+				appelli.add(a);
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return appelli;
 	}
 
 }

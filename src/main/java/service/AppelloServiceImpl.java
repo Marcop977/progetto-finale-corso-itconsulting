@@ -6,14 +6,15 @@ import repos.AppelloDAO;
 import repos.AppelloDAOImpl;
 
 import model.Appello;
+import model.Professore;
 
 public class AppelloServiceImpl implements AppelloService {
 	
 	AppelloDAO dao = new AppelloDAOImpl();
 
 	@Override
-	public List<Appello> getAppelli() {
-		return this.dao.findAll();
+	public List<Appello> getAppelliById(int idAppello) {
+		return this.dao.findAppById(idAppello);
 	}
 
 	@Override
@@ -29,6 +30,16 @@ public class AppelloServiceImpl implements AppelloService {
 	@Override
 	public void close() {
 		this.dao.closeConnection();
+	}
+
+	@Override
+	public List<Appello> getAppelli() {
+		return this.dao.findAll();
+	}
+
+	@Override
+	public List<Appello> getAppelliByProf(Professore p) {
+		return this.dao.findByProf(p);
 	}
 
 }

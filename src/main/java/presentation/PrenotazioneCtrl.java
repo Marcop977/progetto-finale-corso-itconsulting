@@ -37,30 +37,42 @@ public class PrenotazioneCtrl extends HttpServlet {
 		HttpSession session;
 		
 		if (request.getParameter("appello") != null) {
-			String idAppello = request.getParameter("appello");
+			int idAppello = Integer.parseInt(request.getParameter("appello"));
+			session = request.getSession(true);
+			Studente s = (Studente) session.getAttribute("studente");
 			
-			for (Appello a : service2.getAppelli()) {
-				if (Integer.parseInt(idAppello) == a.getIdAppello()) {
-					Prenotazione p = new Prenotazione();
-					session = request.getSession(true);
-					Studente s = (Studente) session.getAttribute("studente");
-					
-					p.setAppPrenotato(a);
-					p.setStudPrenotato(s);
-					request.setAttribute("prenotazione", p);
-					service.addPrenotazione(p);
-					
-					//doGet
-					
-					request.getRequestDispatcher("prenotazione.jsp").forward(request, response);
-					return;
-				}
+			boolean esiste = service.isPrenExists(s, idAppello);
+			
+			if (!esiste) {
+				request.setAttribute("tabellaAttiva", 3);
+				service.addPrenByApp(s, idAppello);;
+			} else {
+				request.setAttribute("tabellaAttiva", 2);
+				request.setAttribute("errore", "a");
 			}
+			request.getRequestDispatcher("studente.jsp").forward(request, response);
+			
+//			for (Appello a : service2.getAppelli()) {
+//				if (Integer.parseInt(idAppello) == a.getIdAppello()) {
+//					Prenotazione p = new Prenotazione();
+//					session = request.getSession(true);
+//					Studente s = (Studente) session.getAttribute("studente");
+//					
+//					p.setAppPrenotato(a);
+//					p.setStudPrenotato(s);
+//					request.setAttribute("prenotazione", p);
+//					service.addPrenotazione(p);
+//					
+//					request.setAttribute("tabellaAttiva", 3);
+//					request.getRequestDispatcher("studente.jsp").forward(request, response);
+//					return;
+//				}
+//			}
 		}
 	}
 	
-	public List<Prenotazione> mostraPrenotazioni(){
-		return service.getPrenotazioni();
-	}
+//	public List<Prenotazione> mostraPrenotazioni(){
+//		return service.getPrenotazioni();
+//	}
 
 }

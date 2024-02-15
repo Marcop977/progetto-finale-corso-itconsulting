@@ -103,16 +103,14 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	}
 
 	@Override
-	public void addPrenotazione(Prenotazione p) {
+	public void addPrenByApp(Studente s, int idAppello) { //studente in sessione e appello inserito dall'utente
 		
 		try {
 			this.ps = this.db.getConnessione().prepareStatement(ADD);
-			this.ps.setInt(1, p.getStudPrenotato().getMatricola());
-			this.ps.setInt(2, p.getAppPrenotato().getIdAppello());
+			this.ps.setInt(1, s.getMatricola());
+			this.ps.setInt(2, idAppello);
 			this.ps.executeUpdate();
-			
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -130,7 +128,55 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public List<Prenotazione> findByAppId(int idAppello) {
+		List<Prenotazione> prenotazioni = new ArrayList<>();
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(FIND_BY_APP);
+			this.ps.setInt(1, idAppello);
+			this.rs = this.ps.executeQuery();
+			
+			while (rs.next()) {
+				int matricola = rs.getInt(1);
+				String nome = rs.getString(2);
+				String cognome = rs.getString(3);
+				int idAppello2 = rs.getInt(4);
+				Date data = rs.getDate(5);
+				int corsoId = rs.getInt(6);
+				int idCorso = rs.getInt(7);
+				String nomeMateria = rs.getString(8);
+				int cattedra = rs.getInt(9);
+				
+				Studente s = new Studente();
+				s.setMatricola(matricola);
+				s.setNome(nome);
+				s.setCognome(cognome);
+				
+				Corso c = new Corso();
+				c.setIdCorso(idCorso);
+				c.setMateria(nomeMateria);
+				
+				Appello a = new Appello();
+				a.setIdAppello(idAppello2);
+				a.setCorsoId(c);
+				
+				Prenotazione p = new Prenotazione();
+				p.setStudPrenotato(s);
+				p.setAppPrenotato(a);
+				
+				prenotazioni.add(p);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return prenotazioni;
+	}
+	
 	@Override
 	public void closeConnection() {
 		try {
@@ -147,6 +193,31 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 		        e.printStackTrace();
 		 }	
 	}
+
+	@Override
+	public boolean isPrenExists(Studente s, int idAppello) {
+		
+		boolean prenotazioneEsistente = false;
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(PREN_EXISTS);
+			this.ps.setInt(1, s.getMatricola());
+			this.ps.setInt(2, idAppello);
+			
+			this.rs = this.ps.executeQuery();
+			if (rs.next()) {
+				prenotazioneEsistente = true;
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return prenotazioneEsistente;
+	}
+
+
 
 
 

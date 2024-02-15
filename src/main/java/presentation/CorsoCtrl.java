@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Corso;
+import model.Professore;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,10 +26,18 @@ public class CorsoCtrl extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		Professore p = (Professore) request.getAttribute("professore");
+//		
+//		if (p != null) {
+//			List<Corso> corsi = service.getCorsiByProf(p);
+//			
+//		}
+		
+		
 		doGet(request, response);
 	}
 	
-	public List<Corso> mostraCorsi() {
+	public List<Corso> mostraCorsi() {  //mostraCorsi collegati ai prof
 		return service.getCorsi();
 	}
 

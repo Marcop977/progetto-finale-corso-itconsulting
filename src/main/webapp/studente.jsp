@@ -7,6 +7,10 @@
 <%@ page import="model.Corso" %>
 <%@page import="presentation.AppelloCtrl" %>
 <%@page import="model.Studente" %>
+<%@ page import="presentation.PrenotazioneCtrl" %>
+<%@ page import="model.Prenotazione" %>
+<%@page import="java.util.List" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +23,7 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Document</title>
   </head>
   <body>
@@ -26,9 +31,14 @@
   <% AddStudenteCtrl studCtrl = new AddStudenteCtrl();
   CorsoCtrl corsoCtrl = new CorsoCtrl();
   Studente s = (Studente) session.getAttribute("studente");
+  System.out.println("Studente: " + s);
   AppelloCtrl controller = new AppelloCtrl();
-  boolean mostraSecondaTabella = request.getAttribute("mostraSecondaTabella") != null && (boolean) request.getAttribute("mostraSecondaTabella");
-  %>
+  String prenExists = (String) request.getAttribute("errore");
+  Integer tabellaAttiva = (Integer) request.getAttribute("tabellaAttiva");
+  if (tabellaAttiva == null) {
+	    tabellaAttiva = 1;
+	}
+  System.out.println(tabellaAttiva + " tabella attiva");%>
   
     <!-- navbar -->
     <div class="container mt-5">
@@ -61,7 +71,7 @@
     </div>
 
    <!-- tabella corsi -->
-   <div <% if (mostraSecondaTabella) out.print("style=\"display:none;\""); %>> <!-- se mostraSecondaTabella è vera, nascondi la prima (cioè questa) -->
+   <div id="tabella1" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
 	    <div class="container my-5">
 	      <h3 class="mb-3">Ciao <%= s.getNome() %> - qui i corsi:</h3>
 	      <table class="table">
@@ -113,14 +123,15 @@
 	    </div>
 	</div>
 	
-	
 			  
 		  
 		  
 		<!-- appelli disponibili -->
-	    <div <% if (!mostraSecondaTabella) out.print("style=\"display:none;\""); %>> <!-- se mostraSecondaTabella è falsa, nascondila -->
+		<div id="tabella2" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
+		<% List<Appello> appelli = (List<Appello>) request.getAttribute("appelli"); %>
+		<% if (appelli != null) { %>
 		    <div class="container my-5">
-				<% for (Appello a : controller.mostraAppelli()) { %>
+				<% for (Appello a : appelli) { %>
 		      <h3 class="mb-3">
 		        Per l'esame di <span class="text-decoration-underline"><%= a.getCorsoId().getMateria()%></span> sono disponibili i seguenti appelli:
 		      </h3>
@@ -160,7 +171,7 @@
 		              name="appello"
 		            />
 		            <div class="input-group-append">
-		              <button class="btn btn-outline-primary" type="submit">
+		              <button id="btnPrenota" class="btn btn-outline-primary" type="submit">
 		                Prenota
 		              </button>
 		            </div>
@@ -168,18 +179,61 @@
 		        </div>
 		      </form>
 		    </div>
+		<% } %>
+		</div>
 		
-		</div>		
+		
+		<% PrenotazioneCtrl controllerPrenot = new PrenotazioneCtrl(); 
+		Prenotazione p = (Prenotazione) request.getAttribute("prenotazione"); %>
+		
+		<div id="tabella3" <% if (tabellaAttiva != 3) out.print("style=\"display:none;\""); %>>
+			<div class="container my-5">
+		      <h3 class="mb-3">
+				Prenotazione effettuata
+		        
+		      </h3>
+		      <table class="table">
+		        <thead>
+		          <tr>
+		            <th scope="col">Data</th>
+		            <th scope="col">Materia</th>
+		            <th scope="col">Studente</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		        <% if (p != null) {%>
+		          <tr>
+		            <td><%= p.getAppPrenotato().getData() %></th>
+		            <td><%= p.getAppPrenotato().getCorsoId().getMateria() %></th>
+		            <td><%= p.getStudPrenotato().getNome() + " " + p.getStudPrenotato().getCognome()%></td>
+		          </tr>
+				<% } %>
+		        </tbody>
+		      </table>
+		      
+		    <div class="d-flex justify-content-between">
+			    <button type="button" class="btn btn-primary">Torna alla home</button>
+			    <button type="button" class="btn btn-primary">Nuova prenotazione</button>
+		    </div>
+		    </div>
+		</div>
+
+		<% if (prenExists != null) {%>
+			<div class="container">
+				<h3 class="my-5">
+					Prenotazione esistente. <a href="index.jsp">Torna alla home</a>
+				</h3>
+			</div>
+			<div class="text-center">
+				<i class="fa-solid fa-exclamation text-muted" style="font-size: 200px"></i>
+			</div>
 	
-	
-	
-	
-	
+		<% } %>
 	
 
 	<!-- Footer -->
     <footer
-      class="text-center text-lg-start bg-light text-muted footer fixed-bottom"
+      class="text-center text-lg-start bg-light text-muted fixed-bottom"
     >
       <section class="">
         <div class="container text-center text-md-start mt-5">
@@ -248,5 +302,7 @@
         <strong>Itconsulting</strong>
       </div>
     </footer>
+    
+    <script src="./js/script.js"></script>
 </body>
 </html>

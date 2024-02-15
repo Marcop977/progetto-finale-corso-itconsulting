@@ -1,11 +1,13 @@
 package repos;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Appello;
 import model.Corso;
 import model.Professore;
 
@@ -20,42 +22,35 @@ public class CorsoDAOImpl implements CorsoDAO {
 	@Override
 	public List<Corso> findAll() {
 		List<Corso> corsi = new ArrayList<>();
-
+		
 		try {
-			System.out.println("Esecuzione della query: " + FIND_ALL);
-			this.ps = this.db.getConnessione().prepareStatement(FIND_ALL);
-			this.rs = ps.executeQuery();
+			this.ps = db.getConnessione().prepareStatement(FIND_ALL);
+			this.rs = this.ps.executeQuery();
+			
 			while (rs.next()) {
-				int idCorso = rs.getInt(1);
-				String materia = rs.getString("materia");
-				int cattedraId = rs.getInt("cattedra");
+				int idCorso = this.rs.getInt(1);
+				int idProfessore = this.rs.getInt(2);
+				String nomeMateria = this.rs.getString(3);
+				String nomeProf = this.rs.getString(4);
+				String cognomeProf = this.rs.getString(5);
 				
-				System.out.println("ID corso: " + idCorso + ", Materia: " + materia + ", ID cattedra: " + cattedraId);
-
-//				Professore p = findProfJoin(cattedraId); //a causa di questa riga di codice, mi stampa solo 1 record. Implemento quindi la funzione direttamente in questo metodo
-				Professore p = new Professore();
-				this.ps1 = this.db.getConnessione().prepareStatement(FIND_PROF_JOIN);
-				this.ps1.setInt(1, cattedraId);
-				this.rs1 = ps1.executeQuery();
-				this.rs1.next();
-				String nome = rs1.getString("nome");
-				String cognome = rs1.getString("cognome");
-				p.setNome(nome);
-				p.setCognome(cognome);
-				System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
+				Professore p1 = new Professore();
+				p1.setIdProfessore(idProfessore);
+				p1.setNome(nomeProf);
+				p1.setCognome(cognomeProf);
 
 				Corso c = new Corso();
 				c.setIdCorso(idCorso);
-				c.setMateria(materia);
-				c.setProfessore(p);
+				c.setMateria(nomeMateria);
+				c.setProfessore(p1);
+				
 				corsi.add(c);
-				System.out.println(cattedraId);
 			}
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return corsi;
 	}
 
@@ -106,6 +101,9 @@ public class CorsoDAOImpl implements CorsoDAO {
 		 }	
 
 	}
+
+
+
 
 //	@Override
 //	public Professore findProfJoin(int matricola) {
