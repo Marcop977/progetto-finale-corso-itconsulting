@@ -16,10 +16,11 @@ public interface PrenotazioneDAO {
 	String FIND_STUD_JOIN = "SELECT idpren, matricola, nome, cognome, data, appello.materia, corso.materia nome_materia FROM prenotazione JOIN studente ON stud_prenotato = matricola JOIN appello ON app_prenotato = idAppello JOIN corso ON appello.materia = idcorso WHERE matricola = ?";
 	String FIND_BY_APP = "SELECT DISTINCT matricola, nome, cognome, idAppello, data, appello.materia, idcorso, corso.materia, cattedra FROM studente JOIN prenotazione ON matricola = stud_prenotato JOIN appello ON idAppello = app_prenotato JOIN corso ON idcorso = appello.materia WHERE idAppello = ?";
 	String PREN_EXISTS = "SELECT * FROM prenotazione WHERE stud_prenotato = ? AND app_prenotato = ?";
-	
+	String FIND_BY_APP_STUD = "SELECT DISTINCT matricola, nome, cognome, idAppello, data, appello.materia, idcorso, corso.materia, cattedra, idpren FROM studente JOIN prenotazione ON matricola = stud_prenotato JOIN appello ON idAppello = app_prenotato JOIN corso ON idcorso = appello.materia WHERE idAppello = ? AND matricola = ?";
 	
 //	List<Prenotazione> findAll();
 	List<Prenotazione> findByAppId(int idAppello);
+	Prenotazione findByAppStud(int idAppello, Studente s);
 	Prenotazione findById(int idpren);
 	void addPrenByApp(Studente s, int idAppello);
 	void updatePrenotazione(Prenotazione p);

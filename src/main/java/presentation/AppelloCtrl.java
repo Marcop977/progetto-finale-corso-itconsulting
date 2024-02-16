@@ -29,7 +29,7 @@ public class AppelloCtrl extends HttpServlet {
 		String materia = request.getParameter("materia"); //appello
 
 		if (materia != null) {
-			List<Appello> appelli = service.getAppelliById(Integer.parseInt(materia));
+			List<Appello> appelli = service.getAppelliByIdCorso(Integer.parseInt(materia));
 			request.setAttribute("appelli", appelli);
 			request.setAttribute("tabellaAttiva", 2);
 			request.getRequestDispatcher("studente.jsp").forward(request, response);

@@ -25,76 +25,6 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	PreparedStatement ps3;
 	ResultSet rs3;
 
-//	@Override
-//	public List<Prenotazione> findAll() {
-//		List<Prenotazione> prenotazioni = new ArrayList<>();
-//		
-//		try {
-//			this.ps = this.db.getConnessione().prepareStatement(FIND_ALL);
-//			this.rs = this.ps.executeQuery();
-//			
-//			while (rs.next()) {
-//				int idPrenotazione = rs.getInt(1);
-//				int studPrenotato = rs.getInt(2);
-//				int appPrenotato = rs.getInt(3);
-//				
-//				
-//				Studente s = new Studente();
-//				this.ps1 = this.db.getConnessione().prepareStatement(FIND_STUD_JOIN); //prendimi lo studente con studPrenotato, collegato alla tabella prenotazione
-//				this.ps1.setInt(1, studPrenotato);
-//				this.rs1 = ps1.executeQuery();
-//				if (rs1.next()) {
-//					System.out.println("prenotazione:" + idPrenotazione);
-//					String nome = rs1.getString("nome");
-//					String cognome = rs1.getString("cognome");
-//					s.setNome(nome);
-//					s.setCognome(cognome);
-//				} else {
-//					System.out.println("Errore con studente");
-//				}
-//				
-//				
-//				Corso c = new Corso();
-//				this.ps2 = this.db.getConnessione().prepareStatement(FIND_STUD_JOIN); // prendimi il corso di quello studente
-//				this.ps2.setInt(1, studPrenotato);
-//				this.rs2 = ps2.executeQuery();
-//				if (rs2.next()) {
-//					String nomeMateria = this.rs2.getString("nome_materia");
-//					c.setMateria(nomeMateria);
-//				} else {
-//					System.out.println("Errore con corso");
-//				}
-//				
-//				Appello a = new Appello();
-//				this.ps3 = this.db.getConnessione().prepareStatement(FIND_STUD_JOIN); // prendimi l'appello di quello studente
-//				this.ps3.setInt(1, studPrenotato);
-//				this.rs3 = ps3.executeQuery();
-//				if (rs3.next()) {
-//					Date data = rs3.getDate("data");
-//					int corsoId = rs3.getInt("materia");
-//					a.setData(data);
-//					a.setCorsoId(c);
-//				} else {
-//					System.out.println("Errore con appello");
-//				}
-//				
-//				
-//				Prenotazione p = new Prenotazione();
-//				p.setIdPrenotazione(idPrenotazione);
-//				p.setStudPrenotato(s);
-//				p.setAppPrenotato(a);
-//				
-//				prenotazioni.add(p);
-//			}
-//			
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		
-//		return prenotazioni;
-//	}
 
 	@Override
 	public Prenotazione findById(int idpren) {
@@ -216,6 +146,69 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 		
 		return prenotazioneEsistente;
 	}
+
+	@Override
+	public Prenotazione findByAppStud(int idAppello, Studente s1) {
+	    Prenotazione p = null;
+	    
+	    try {
+	        this.ps1 = db.getConnessione().prepareStatement(FIND_BY_APP_STUD);
+	        this.ps1.setInt(1, idAppello);
+	        this.ps1.setInt(2, s1.getMatricola());
+	        this.rs1 = this.ps1.executeQuery();
+	        
+	        if (this.rs1.next()) {
+	            int matricola = rs1.getInt(1);
+	            String nome = rs1.getString(2);
+	            String cognome = rs1.getString(3);
+	            int idAppello2 = rs1.getInt(4);
+	            Date data = rs1.getDate(5);
+	            int corsoId = rs1.getInt(6);
+	            int idCorso = rs1.getInt(7);
+	            String nomeMateria = rs1.getString(8);
+	            int cattedra = rs1.getInt(9);
+	            int idPren = rs1.getInt(10);
+	            
+	            Studente s = new Studente();
+	            s.setMatricola(matricola);
+	            s.setNome(nome);
+	            s.setCognome(cognome);
+	            
+	            Corso c = new Corso();
+	            c.setIdCorso(idCorso);
+	            c.setMateria(nomeMateria);
+	            
+	            Appello a = new Appello();
+	            a.setIdAppello(idAppello2);
+	            a.setCorsoId(c);
+	            a.setData(data);
+	            
+	            p = new Prenotazione();
+	            p.setStudPrenotato(s);
+	            p.setIdPrenotazione(idPren);
+	            p.setAppPrenotato(a);
+	        } else {
+	        	System.out.println("rs non trovato");
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs1 != null) {
+	                rs1.close();
+	            }
+	            if (ps1 != null) {
+	                ps1.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    
+	    return p;
+	}
+
 
 
 

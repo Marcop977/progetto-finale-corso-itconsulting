@@ -106,4 +106,23 @@ public class StudenteDAOImpl implements StudenteDAO {
 		 }		        
 	}
 
+	@Override
+	public boolean isPresente(String u, String p) {
+		boolean esiste = false;
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(FIND_BY_USERPASS);
+			this.ps.setString(1, u);
+			this.ps.setString(2, p);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next())
+				esiste = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return esiste;
+	}
+
 }

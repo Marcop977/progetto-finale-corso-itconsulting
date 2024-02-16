@@ -8,8 +8,9 @@ import model.Professore;
 public interface AppelloService {
 	
 	List<Appello> getAppelli();
-	List<Appello> getAppelliById(int idAppello);
+	List<Appello> getAppelliByIdCorso(int idCorso);
 	List<Appello> getAppelliByProf(Professore p);
+	List<Appello> getAppelliCorsi();
 	void addAppello(Appello a);
 	void deleteAppelloById(int idAppello);
 	void close();

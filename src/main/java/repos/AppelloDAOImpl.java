@@ -85,16 +85,16 @@ public class AppelloDAOImpl implements AppelloDAO {
 	}
 
 	@Override
-	public List<Appello> findAppById(int idAppello) {
+	public List<Appello> findAppByCorsoID(int idCorso) {
 		List<Appello> appelli = new ArrayList<>();
 		
 		try {
 			this.ps1 = db.getConnessione().prepareStatement(FIND_BY_ID);
-			this.ps1.setInt(1, idAppello);
+			this.ps1.setInt(1, idCorso);
 			this.rs1 = ps1.executeQuery();
 			
 			while (rs1.next()) {
-				int idCorso = rs1.getInt(2);
+				int idCorsoDB = rs1.getInt(2);
 				String nomeMateria = rs1.getString(1);
 				int idProfessore = rs1.getInt(5);
 				String nomeProf = rs1.getString(3);
@@ -112,7 +112,7 @@ public class AppelloDAOImpl implements AppelloDAO {
 				p.setPassword(password);
 				
 				Corso c = new Corso();
-				c.setIdCorso(idCorso);
+				c.setIdCorso(idCorsoDB);
 				c.setMateria(nomeMateria);
 				c.setProfessore(p);
 				
@@ -160,6 +160,47 @@ public class AppelloDAOImpl implements AppelloDAO {
 			}
 			
 			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return appelli;
+	}
+
+	@Override
+	public List<Appello> findCorsiApp() {
+		List<Appello> appelli = new ArrayList<>();
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(FIND_CORSO_APP);
+			this.rs = this.ps.executeQuery();
+			
+			while (this.rs.next()) {
+				int idCorso = this.rs.getInt(1);
+				String nomeMateria = this.rs.getString(2);
+				String nomeProf = this.rs.getString(3);
+				String cognomeProf = this.rs.getString(4);
+				int idAppello = this.rs.getInt(5);
+				Date data = this.rs.getDate(6);
+//				Corso c = (Corso) this.rs.getObject(7);
+				
+				Professore p = new Professore();
+				p.setNome(nomeProf);
+				p.setCognome(cognomeProf);
+				
+				Corso c = new Corso();
+				c.setIdCorso(idCorso);
+				c.setMateria(nomeMateria);
+				c.setProfessore(p);
+				
+				Appello a = new Appello();
+				a.setData(data);
+				a.setIdAppello(idAppello);
+				a.setCorsoId(c);
+				
+				appelli.add(a);
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

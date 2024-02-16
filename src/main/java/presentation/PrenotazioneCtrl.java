@@ -25,12 +25,6 @@ public class PrenotazioneCtrl extends HttpServlet {
 	
 	PrenotazioneService service = new PrenotazioneServiceImpl();
 	AppelloService service2 = new AppelloServiceImpl();
-       
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		request.getRequestDispatcher("prenotazione.jsp").forward(request, response);
-	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -38,41 +32,23 @@ public class PrenotazioneCtrl extends HttpServlet {
 		
 		if (request.getParameter("appello") != null) {
 			int idAppello = Integer.parseInt(request.getParameter("appello"));
+			System.out.println("idAppello: " + idAppello);
 			session = request.getSession(true);
 			Studente s = (Studente) session.getAttribute("studente");
-			
+			System.out.println("Studente Parametro: " + s.getMatricola());
 			boolean esiste = service.isPrenExists(s, idAppello);
 			
 			if (!esiste) {
-				request.setAttribute("tabellaAttiva", 3);
 				service.addPrenByApp(s, idAppello);;
+				Prenotazione p = service.getPrenByAppStud(idAppello, s); //dato l'appello prenotato e lo studente in sessione, dammi la prenotazione
+				request.setAttribute("prenotazione", p);
+				request.setAttribute("tabellaAttiva", 3);
+				System.out.println(p);
 			} else {
 				request.setAttribute("tabellaAttiva", 2);
 				request.setAttribute("errore", "a");
 			}
 			request.getRequestDispatcher("studente.jsp").forward(request, response);
-			
-//			for (Appello a : service2.getAppelli()) {
-//				if (Integer.parseInt(idAppello) == a.getIdAppello()) {
-//					Prenotazione p = new Prenotazione();
-//					session = request.getSession(true);
-//					Studente s = (Studente) session.getAttribute("studente");
-//					
-//					p.setAppPrenotato(a);
-//					p.setStudPrenotato(s);
-//					request.setAttribute("prenotazione", p);
-//					service.addPrenotazione(p);
-//					
-//					request.setAttribute("tabellaAttiva", 3);
-//					request.getRequestDispatcher("studente.jsp").forward(request, response);
-//					return;
-//				}
-//			}
 		}
 	}
-	
-//	public List<Prenotazione> mostraPrenotazioni(){
-//		return service.getPrenotazioni();
-//	}
-
 }

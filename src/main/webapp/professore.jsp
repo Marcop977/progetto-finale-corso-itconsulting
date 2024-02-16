@@ -19,6 +19,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Document</title>
   </head>
@@ -81,31 +83,16 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
                 <th scope="row"><%= a.getIdAppello() %></th>
                 <td><%= a.getData() %></td>
                 <td><%= a.getCorsoId().getMateria() %></td>
+                <td>
+                <form action="prenotazioni" method="post">
+                	<input type="hidden" name="ID_appello" value="<%=a.getIdAppello() %>">
+                	<button class="btn btn-outline-primary" type="submit"><i class="bi bi-eye"></i></button>
+                </form>
+                </td>
             </tr>
         </tbody>
     </table>
 	</div>
-    <!-- appello -->
-    <div class="container text-end">
-      <form action="prenotazioni" method="post">
-        <label for="" class="d-block"
-          >Inserisci l'appello che vuoi visualizzare:</label
-        >
-        <div class="d-flex justify-content-end mt-2">
-          <div class="input-group mb-3 w-25">
-            <input
-              type="number"
-              class="form-control"
-              placeholder="Inserisci appello"
-              name="ID_appello"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-outline-primary" type="submit">Vai</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
     <% } else { %>
     		<div class="container my-5">
 	           <h3 class="mb-3">
@@ -116,14 +103,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
       <% } } %>
 	</div>
 
-	
-	
-	
-	
-	
-	
-	
-	
+
 		
 	<div class="container my-5" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
 		<% List<Prenotazione> prenotazioni = (List<Prenotazione>) request.getAttribute("prenotazioni"); 
@@ -154,6 +134,10 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
             <% } } %>
         </tbody>
     </table>
+	    <div class="d-flex justify-content-between my-5">
+		    <a href="index.jsp" class="btn btn-primary">Torna alla home</a>
+		    <a href="" class="btn btn-primary">Visualizza corsi</a>
+	    </div>
 	</div>
 
 
@@ -161,7 +145,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 
     <!-- Footer -->
     <footer
-      class="text-center text-lg-start bg-light text-muted fixed-bottom"
+      class="text-center text-lg-start bg-light text-muted"
     >
       <section class="">
         <div class="container text-center text-md-start mt-5">

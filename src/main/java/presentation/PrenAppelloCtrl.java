@@ -24,6 +24,7 @@ public class PrenAppelloCtrl extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("ciao");
 		String idAppello = request.getParameter("ID_appello");
+		System.out.println("Appello: " + idAppello);
 		if (idAppello != null) {
 			List<Prenotazione> prenotazioni = service.getPrenByAppId(Integer.parseInt(idAppello));
 			request.setAttribute("prenotazioni", prenotazioni);

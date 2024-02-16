@@ -41,4 +41,9 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
 		return this.dao.isPrenExists(s, idAppello);
 	}
 
+	@Override
+	public Prenotazione getPrenByAppStud(int idAppello, Studente s) {
+		return this.dao.findByAppStud(idAppello, s);
+	}
+
 }

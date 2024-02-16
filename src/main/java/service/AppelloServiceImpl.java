@@ -13,8 +13,8 @@ public class AppelloServiceImpl implements AppelloService {
 	AppelloDAO dao = new AppelloDAOImpl();
 
 	@Override
-	public List<Appello> getAppelliById(int idAppello) {
-		return this.dao.findAppById(idAppello);
+	public List<Appello> getAppelliByIdCorso(int idCorso) {
+		return this.dao.findAppByCorsoID(idCorso);
 	}
 
 	@Override
@@ -40,6 +40,11 @@ public class AppelloServiceImpl implements AppelloService {
 	@Override
 	public List<Appello> getAppelliByProf(Professore p) {
 		return this.dao.findByProf(p);
+	}
+
+	@Override
+	public List<Appello> getAppelliCorsi() {
+		return this.dao.findCorsiApp();
 	}
 
 }

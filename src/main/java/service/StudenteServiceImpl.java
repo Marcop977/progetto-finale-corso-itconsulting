@@ -30,4 +30,9 @@ public class StudenteServiceImpl implements StudenteService {
 		dao.closeConnection();
 	}
 
+	@Override
+	public boolean isStudentePresente(String u, String p) {
+		return this.dao.isPresente(u, p);
+	}
+
 }

@@ -21,7 +21,7 @@ public class AddStudenteCtrl extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("segreteria.jsp").forward(request, response);
+//		request.getRequestDispatcher("segreteria.jsp").forward(request, response);
 	}
 
 	@Override
@@ -32,17 +32,19 @@ public class AddStudenteCtrl extends HttpServlet{
 			String password = request.getParameter("password");
 			String nome = request.getParameter("nome");
 			String cognome = request.getParameter("cognome");
+			System.out.println(username + password);
 			
-			Studente s = new Studente();
-			s.setUsername(username);
-			s.setPassword(password);
-			s.setNome(nome);
-			s.setCognome(cognome);
-			service.addStudente(s);
-			System.out.println(nome);
+			if (!service.isStudentePresente(username, password)) {
+				Studente s = new Studente();
+				s.setUsername(username);
+				s.setPassword(password);
+				s.setNome(nome);
+				s.setCognome(cognome);
+				service.addStudente(s);
+			}
 		}
 		
-		doGet(request, response);
+		request.getRequestDispatcher("segreteria.jsp").forward(request, response);
 	}
 
 	public List<Studente> mostraStudenti(){

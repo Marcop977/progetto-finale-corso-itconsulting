@@ -4,3 +4,4 @@ new Swiper("#swiper-1", {
 	},
 	loop: true,
 });
+

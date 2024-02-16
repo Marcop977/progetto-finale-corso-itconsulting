@@ -9,6 +9,7 @@ public interface StudenteService {
 	List<Studente> getStudenti();
 	void addStudente(Studente s);
 	void deleteStudenteById(int matricola);
+	boolean isStudentePresente(String u, String p);
 	void close();
 
 }
