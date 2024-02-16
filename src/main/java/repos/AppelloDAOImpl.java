@@ -102,7 +102,7 @@ public class AppelloDAOImpl implements AppelloDAO {
 				String username = rs1.getString(6);
 				String password = rs1.getString(7);
 				Date data = rs1.getDate(8);
-				int idAppelloDB = rs1.getInt(9);  //potevo anche prenderlo dal parametro, ma forse così è meglio
+				int idAppelloDB = rs1.getInt(9);
 				
 				Professore p = new Professore();
 				p.setIdProfessore(idProfessore);

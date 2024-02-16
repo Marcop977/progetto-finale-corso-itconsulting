@@ -160,8 +160,8 @@
 		      </table>
 		    </div>
 			<div class="container pt-5 d-flex justify-content-between">
-		    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
-		    <a href="index.jsp">Torna alla home</a>
+			    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
+			    <a href="index.jsp">Torna alla home</a>
 		    </div>
 		<% } %>
 		</div>
@@ -313,9 +313,7 @@
                 window.history.back();
             });
         });
-    });
-    
-    
+    });    
     </script>
 </body>
 </html>

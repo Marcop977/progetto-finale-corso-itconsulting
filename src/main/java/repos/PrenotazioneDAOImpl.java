@@ -90,6 +90,7 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 				
 				Appello a = new Appello();
 				a.setIdAppello(idAppello2);
+				a.setData(data);
 				a.setCorsoId(c);
 				
 				Prenotazione p = new Prenotazione();
