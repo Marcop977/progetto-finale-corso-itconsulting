@@ -56,7 +56,18 @@ public class ProfessoreDAOImpl implements ProfessoreDAO {
 
 	@Override
 	public void addProfessore(Professore p) {
-		// TODO Auto-generated method stub
+		try {
+			this.ps = conn.getConnessione().prepareStatement(ADD);
+			this.ps.setString(1, p.getUsername());
+			this.ps.setString(2, p.getPassword());
+			this.ps.setString(3, String.valueOf(p.getTipoUtente()));;
+			this.ps.setString(4, p.getNome());
+			this.ps.setString(5, p.getCognome());
+			this.ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -76,6 +87,25 @@ public class ProfessoreDAOImpl implements ProfessoreDAO {
 	public void closeConnection() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean isPresente(String u, String p) {
+		boolean esiste = false;
+		
+		try {
+			this.ps = conn.getConnessione().prepareStatement(FIND_BY_USERPASS);
+			this.ps.setString(1, u);
+			this.ps.setString(2, p);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next())
+				esiste = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return esiste;
 	}
 
 }

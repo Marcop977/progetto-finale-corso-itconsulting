@@ -83,6 +83,7 @@ public class LoginServlet extends HttpServlet {
 
 		Admin a = service4.getAdminByUsern(username, password);
 		if (a != null) {
+			request.setAttribute("tabellaAttiva", 1);
 			session.setAttribute("admin", a);
 			request.getRequestDispatcher("segreteria.jsp").forward(request, response);
 			return;

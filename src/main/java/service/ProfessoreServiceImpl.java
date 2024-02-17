@@ -21,5 +21,15 @@ public class ProfessoreServiceImpl implements ProfessoreService {
 	public void close() {
 		this.dao.closeConnection();
 	}
+
+	@Override
+	public void addProfessore(Professore p) {
+		this.dao.addProfessore(p);
+	}
+
+	@Override
+	public boolean isProfPresente(String u, String p) {
+		return this.dao.isPresente(u, p);
+	}
 	
 }

@@ -46,35 +46,63 @@
   if (tabellaAttiva == null) {
 	    tabellaAttiva = 1;
 	}
-  System.out.println(tabellaAttiva + " tabella attiva");%>
+  String tabellaNome = "";
+  if (tabellaAttiva != 1) {
+      tabellaNome = "Appelli";
+  } else {
+      tabellaNome = "Corsi";
+  } %>
   
     <!-- navbar -->
-    <div class="container mt-5">
-      <div class="row align-items-center">
-        <div class="col-6 pb-4">
-          <a href="index.jsp"><img src="./img/logo.png" alt="" /></a>
-        </div>
-        <div class="col-6">
-          <ul
-            class="d-flex gap-5 d-flex align-items-center justify-content-end"
-            style="list-style-type: none"
+    <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
+      <div class="container">
+        <img src="./img/logo.png" alt="" loading="lazy" />
+        <button
+          class="navbar-toggler ps-0"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarExample01"
+          aria-controls="navbarExample01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span
+            class="navbar-toggler-icon d-flex justify-content-start align-items-center"
           >
-            <li><a href="index.jsp" style="text-decoration: none">HOME</a></li>
-            <li><a href="" style="text-decoration: none">ABOUT US</a></li>
-            <li><a href="" style="text-decoration: none">SHORTCODE</a></li>
-            <li><a href="" style="text-decoration: none">NEWS</a></li>
-            <li>
-              <a href="logout" style="text-decoration: none;">Logout</a>
+            <i class="fas fa-bars"></i>
+          </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarExample01">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#pets">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#adoptions"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#foundation"
+                >Shortcode</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#help">News</a>
+            </li>
+            <li class="nav-item">
+              <a href="logout" class="nav-link"><i class="bi bi-box-arrow-in-left text-danger"></i> Logout</a
+              >
             </li>
           </ul>
         </div>
       </div>
-    </div>
+    </nav>
 
     <!-- benvenuto -->
     <div class="bg-primary p-5">
       <div class="container text-center">
-        <h1 class="text-light">Area personale - Studente - Matricola <%=s.getMatricola() %></h1>
+        <h1 class="text-light">Area personale - Studente - <%=tabellaNome %></h1>
       </div>
     </div>
 
@@ -110,7 +138,7 @@
 	      </table>
 	    </div>
 	    <div class="container pt-5 text-end">
-	    <a href="index.jsp">Torna alla home</a>
+	    <a href="logout">Logout</a>
 	    </div>
 	</div>
 	
@@ -159,9 +187,9 @@
 		        </tbody>
 		      </table>
 		    </div>
-			<div class="container pt-5 d-flex justify-content-between">
+			<div class="container py-5 d-flex justify-content-between">
 			    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
-			    <a href="index.jsp">Torna alla home</a>
+			    <a href="logout">Logout/Torna alla home</a>
 		    </div>
 		<% } %>
 		</div>
@@ -202,13 +230,13 @@
 	    	</div>
 			<div class="container w-50 d-flex justify-content-between pt-2">
 		      <a href="javascript:void(0);" class="btnBack">Prenota nuovo appello</a>
-		      <a href="index.jsp">Torna alla home</a>
+		      <a href="logout">Logout/Torna alla home</a>
 		    </div>
 	        	<% } %>
 		</div>
 		
 			<% if (prenExists != null) {%>
-				<div class="container mt-5">
+				<div class="container my-5 pb-5">
 			      <div class="row justify-content-center">
 			        <div class="col-md-6">
 			          <div class="card px-5 py-5 shadow">
@@ -223,7 +251,7 @@
 			              </h2>
 			              <p>oppure</p>
 			            </div>
-			            <div class="text-center"><a href="index.jsp">Torna alla home</a></div>
+			            <div class="text-center"><a href="logout">Logout/Torna alla home</a></div>
 			          </div>
 			        </div>
 			      </div>
@@ -235,72 +263,93 @@
 	
 
 	<!-- Footer -->
-    <footer>
-      <div class="container-fluid" style="background: #e4e4e4; margin-top: 12vh">
-        <div class="container pt-5">
-          <div class="row">
-            <div class="col-lg-4">
-              <h4>Sailor</h4>
-              <p>Lorem ipsum, dolor sit amet consectetur adipisicing.</p>
-              <p class="m-0"><strong>Phone:</strong> 435452345</p>
-              <p><strong>Email:</strong> sdfgssdfg@gdfn.com</p>
+    <footer class="text-start text-light" style="background-color: #002046">
+      <div class="container p-5">
+        <div class="row p-5">
+          <div class="col-lg-3">
+            <a href=""><img src="./img/logo-2.png" alt="" /></a>
+            <small class="d-block mt-3 mb-2" style="line-height: 1.8">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est,
+              perferendis aperiam! Adipisci voluptatum similique corporis.
+            </small>
+            <a href=""><i class="bi bi-facebook fs-5"></i></a>
+            <a href=""><i class="bi bi-twitter ms-3 fs-5"></i></a>
+            <a href=""><i class="bi bi-instagram ms-3 fs-5"></i></a>
+            <a href=""><i class="bi bi-whatsapp ms-3 fs-5"></i></a>
+          </div>
+          <div class="col-lg-2">
+            <h5>Quick Links</h5>
+            <ul class="p-0" style="line-height: 2">
+              <li>
+                <small><a href="">Home</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-2">
+            <h5>Pages</h5>
+            <ul class="p-0" style="line-height: 2">
+              <li>
+              	<small><a href="">Home</a></small>
+              <li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+              <li>
+                <small><a href="">Opening Hours</a></small>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-5">
+            <h5>Contact Us</h5>
+            <div class="d-flex gap-3 mb-2 mt-3">
+              <input
+                type="text"
+                placeholder="Name*"
+                class="custom-input py-2"
+              />
+              <input
+                type="text"
+                placeholder="Email*"
+                class="custom-input py-2"
+              />
             </div>
-            <div class="col-lg-2">
-              <h6>Useful Links</h6>
-              <ul class="list-unstyled">
-                <li class="mb-2 mt-3 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Home
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>About us
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Services
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Terms of
-                  service
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Privacy policy
-                </li>
-              </ul>
-            </div>
-            <div class="col-lg-2">
-              <h6>Our Services</h6>
-              <ul class="list-unstyled">
-                <li class="mb-2 mt-3 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Payments
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Shipping
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Product
-                  Returns
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>FAQ
-                </li>
-                <li class="mb-2 fw-light">
-                  <i class="bi bi-chevron-right riduci-icona"></i>Shop Checkout
-                </li>
-              </ul>
-            </div>
-            <div class="col-lg-4">
-              <h6>Our Newsletter</h6>
-              <p>Lorem ipsum, dolor sit amet consectetur adipisicing.</p>
-              <div class="input-group">
-                <input type="text" class="form-control" />
-                <button type="button" class="btn btn-primary">Subscribe</button>
-              </div>
-            </div>
+            <input
+              type="text"
+              placeholder="Message*"
+              class="custom-input pb-4"
+              style="width: 91.5%"
+            />
+            <button type="button" class="btn btn-primary d-block mt-4 px-4">
+              SEND
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-12 py-4" style="background: #dbdbdb">
-        <div class="text-center">
-          <p>© Copyright <strong>Itconsulting</strong>. All Rights Reserved</p>
+      <div class="bg-light py-3">
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="text-dark m-0">
+              © 2024 Copyright: <strong>Itconsulting</strong>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
