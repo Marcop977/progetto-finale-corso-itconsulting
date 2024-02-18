@@ -22,15 +22,14 @@ public class AddProfessoreCtrl extends HttpServlet {
 	ProfessoreService service = new ProfessoreServiceImpl();
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String nome = request.getParameter("nome");
+		String cognome = request.getParameter("cognome");
 		
 		HttpSession session;
 		
-		if(request.getParameter("username") != null && request.getParameter("password") != null && request.getParameter("nome") != null && request.getParameter("cognome") != null) {
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String nome = request.getParameter("nome");
-			String cognome = request.getParameter("cognome");
-			
+		if(username != "" && password != "" && nome != "" && cognome != "") {
 			if (!service.isProfPresente(username, password)) {
 				session = request.getSession(true);
 				Professore p = new Professore();

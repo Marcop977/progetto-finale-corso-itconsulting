@@ -125,4 +125,34 @@ public class StudenteDAOImpl implements StudenteDAO {
 		return esiste;
 	}
 
+	@Override
+	public Studente findByUserPass(String u, String p) {
+		Studente s = null;
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_BY_USERPASS);
+			this.ps.setString(1, u);
+			this.ps.setString(2, p);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next()) {
+				int matricola = this.rs.getInt("matricola");
+				String nome = this.rs.getString("nome");
+				String cognome = this.rs.getString("cognome");
+				String username = this.rs.getString("username");
+				String password = this.rs.getString("password");
+				s = new Studente();
+				s.setMatricola(matricola);
+				s.setNome(nome);
+				s.setCognome(cognome);
+				s.setUsername(username);
+				s.setPassword(password);
+			} else {
+				System.out.println("rs non trovato studente");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+
 }

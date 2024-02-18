@@ -41,6 +41,7 @@
   Studente s = (Studente) session.getAttribute("studente");
   System.out.println("Studente: " + s);
   AppelloCtrl controller = new AppelloCtrl();
+  //se la prenotazione esiste
   String prenExists = (String) request.getAttribute("errore");
   Integer tabellaAttiva = (Integer) request.getAttribute("tabellaAttiva");
   if (tabellaAttiva == null) {
@@ -56,7 +57,7 @@
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
       <div class="container">
-        <img src="./img/logo.png" alt="" loading="lazy" />
+        <a href="index.jsp"><img src="./img/logo.png" alt="" /></a>
         <button
           class="navbar-toggler ps-0"
           type="button"
@@ -75,7 +76,7 @@
         <div class="collapse navbar-collapse" id="navbarExample01">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#pets">Home</a>
+              <a class="nav-link" aria-current="page" href="index.jsp">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="#adoptions"
@@ -229,7 +230,7 @@
 		        </div>
 	    	</div>
 			<div class="container w-50 d-flex justify-content-between pt-2">
-		      <a href="javascript:void(0);" class="btnBack">Prenota nuovo appello</a>
+		      <a href="javascript:void(0);" class="btnBack mb-5">Prenota nuovo appello</a>
 		      <a href="logout">Logout/Torna alla home</a>
 		    </div>
 	        	<% } %>

@@ -15,6 +15,7 @@ public interface StudenteDAO {
 	
 	List<Studente> findAll();
 	Studente findById(int matricola);
+	Studente findByUserPass(String u, String p);
 	boolean isPresente(String u, String p);
 	void addStudente(Studente s);
 	void updateStudente(Studente s);

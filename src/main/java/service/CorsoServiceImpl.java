@@ -17,18 +17,23 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	@Override
-	public void addCorso(Corso c, Professore p) {
-		this.dao.addCorso(c, p);
+	public void addCorso(String materia, int cattedra) {
+		this.dao.addCorso(materia, cattedra);
 	}
 
 	@Override
 	public void deleteCorsoById(int idCorso) {
-		this.dao.deleteCorso(idCorso);
+		this.dao.deleteCorsoById(idCorso);
 	}
 
 	@Override
 	public void close() {
 		this.dao.closeConnection();
+	}
+
+	@Override
+	public boolean isCPresente(String materia) {
+		return this.dao.isCPresente(materia);
 	}
 
 //	@Override

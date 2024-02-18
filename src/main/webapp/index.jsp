@@ -32,7 +32,7 @@
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
       <div class="container">
-        <img src="./img/logo.png" alt="" loading="lazy" />
+       <a href="index.jsp"><img src="./img/logo.png" alt="" /></a>
         <button
           class="navbar-toggler ps-0"
           type="button"
@@ -51,7 +51,7 @@
         <div class="collapse navbar-collapse" id="navbarExample01">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#pets">Home</a>
+              <a class="nav-link" aria-current="page" href="index.jsp">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="#adoptions"

@@ -3,7 +3,7 @@ package service;
 import java.util.List;
 
 import model.Professore;
-
+import model.Studente;
 import repos.ProfessoreDAO;
 
 import repos.ProfessoreDAOImpl;
@@ -30,6 +30,26 @@ public class ProfessoreServiceImpl implements ProfessoreService {
 	@Override
 	public boolean isProfPresente(String u, String p) {
 		return this.dao.isPresente(u, p);
+	}
+
+	@Override
+	public void deleteProfById(int idProfessore) {
+		this.dao.deleteProfessoreById(idProfessore);
+	}
+
+	@Override
+	public int getIdByNameSur(String nome, String cognome) {
+		return this.dao.findProfByNameSur(nome, cognome);
+	}
+
+	@Override
+	public boolean isProfPresenteNome(String nome, String cognome) {
+		return this.dao.isPresenteConNome(nome, cognome);
+	}
+
+	@Override
+	public Professore getProfByUserPass(String u, String p) {
+		return this.dao.findByUserPass(u, p);
 	}
 	
 }

@@ -30,7 +30,7 @@ public class AddStudenteCtrl extends HttpServlet{
 		
 		HttpSession session;
 		
-		if(request.getParameter("username") != null && request.getParameter("password") != null && request.getParameter("nome") != null && request.getParameter("cognome") != null) {
+		if(request.getParameter("username") != "" && request.getParameter("password") != "" && request.getParameter("nome") != "" && request.getParameter("cognome") != "") {
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			String nome = request.getParameter("nome");

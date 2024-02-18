@@ -39,7 +39,7 @@ public class Appello {
 	}
 	@Override
 	public String toString() {
-		return "Appello [data=" + data + ", corsoId=" + corsoId + "]";
+		return "Appello [idAppello=" + idAppello + ", data=" + data + ", corsoId=" + corsoId + "]";
 	}
 	
 }

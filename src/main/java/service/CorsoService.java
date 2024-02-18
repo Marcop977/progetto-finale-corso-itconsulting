@@ -8,8 +8,9 @@ import model.Professore;
 public interface CorsoService {
 
 	List<Corso> getCorsi();
-	void addCorso(Corso c, Professore p);
+	void addCorso(String materia, int cattedra);
 	void deleteCorsoById(int idCorso);
+	boolean isCPresente(String materia);
 //	Professore findByJoin(int matricola);
 	void close();
 }

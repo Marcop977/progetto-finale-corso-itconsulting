@@ -35,4 +35,9 @@ public class StudenteServiceImpl implements StudenteService {
 		return this.dao.isPresente(u, p);
 	}
 
+	@Override
+	public Studente getStudenteByUserPass(String u, String p) {
+		return this.dao.findByUserPass(u, p);
+	}
+
 }

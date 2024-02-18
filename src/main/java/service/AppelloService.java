@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Date;
 import java.util.List;
 
 import model.Appello;
@@ -11,8 +12,9 @@ public interface AppelloService {
 	List<Appello> getAppelliByIdCorso(int idCorso);
 	List<Appello> getAppelliByProf(Professore p);
 	List<Appello> getAppelliCorsi();
-	void addAppello(Appello a);
+	void addAppello(String data, int idCorso);
 	void deleteAppelloById(int idAppello);
+	boolean isPrenPresente(int idAppello);
 	void close();
 
 }

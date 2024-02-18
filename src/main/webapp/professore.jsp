@@ -44,7 +44,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
       <div class="container">
-        <img src="./img/logo.png" alt="" loading="lazy" />
+        <a href="index.jsp"><img src="./img/logo.png" alt="" /></a>
         <button
           class="navbar-toggler ps-0"
           type="button"
@@ -63,7 +63,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
         <div class="collapse navbar-collapse" id="navbarExample01">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#pets">Home</a>
+              <a class="nav-link" aria-current="page" href="index.jsp">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="#adoptions"
@@ -95,12 +95,31 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
     </div>
 
     <!-- tabella corsi -->	
-	 <div class="container my-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
-	    <% for (Appello a : appelloController.mostraAppelliByProf(p)) { %>
-		<% if (a != null) { %>
+	<div class="container my-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
+
+		<% if (appelloController.mostraAppelliByProf(p).isEmpty()) { %>
+		<div class="container my-5 pb-5">
+			      <div class="row justify-content-center">
+			        <div class="col-md-6">
+			          <div class="card px-5 py-5 shadow">
+			            <div class="text-center">
+			              <i
+			                class="bi bi-file-earmark text-muted"
+			                style="font-size: 400%"
+			              ></i>
+			              <h2 class="mb-3">
+			                Per la sua materia/e non ci sono appelli disponibili.
+			              </h2>
+			                <a href="logout">Effettua logout</a>
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+ 		<%}else {%>
 	    <div class="container mt-4">
 		    <h3 class="mb-3">
-		        Per la sua materia: <%= a.getCorsoId().getMateria() %> sono disponibili i seguenti appelli:
+		        Per la sua materia/e sono disponibili i seguenti appelli:
 		    </h3>
 	      <table class="table shadow">
 	        <thead>
@@ -112,6 +131,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 	          </tr>
 	        </thead>
 	        <tbody>
+	        <% for (Appello a : appelloController.mostraAppelliByProf(p)) { %>
+        <% if (a != null) { %>
 	          <tr>
 	            <th scope="row"><%= a.getIdAppello() %></th>
                 <td><%= a.getData() %></td>
@@ -123,20 +144,14 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
                 	</form>
                 </td>
 	          </tr>
+		<% } }%>
 	        </tbody>
 	      </table>
 	    </div>
+	    
 	    <div class="container pt-5 mt-5 text-end">
 	    <a href="logout">Logout</a>
 	    </div>
-	    <% } else { %>
-		<div class="container my-5">
-        <h3 class="mb-3">
-	        Per la sua materia: <%= a.getCorsoId().getMateria() %> non ci sono appelli disponibili.
-	    	</h3>
- 		</div>
-	    
-		<% } } %>
 		</div>
 	
 	
@@ -153,8 +168,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 
 		
 	<div class="container my-5" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
-		<% List<Prenotazione> prenotazioni = (List<Prenotazione>) request.getAttribute("prenotazioni"); 
-			if (prenotazioni != null) {%>
+		<% List<Prenotazione> prenotazioni = (List<Prenotazione>) request.getAttribute("prenotazioni"); %>
+		<% if (prenotazioni != null && !prenotazioni.isEmpty()) { %>
         <% for (Prenotazione p1 : prenotazioni) { %>
         <div class="container mt-4">
 		    <h3 class="mb-3">Per il corso di
@@ -196,7 +211,28 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 		    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
 		    <a href="logout">Logout/Torna alla home</a>
 		</div>
-		<% } %>
+		<% } else { %>
+			   <div class="container my-5 pb-5">
+			      <div class="row justify-content-center">
+			        <div class="col-md-6">
+			          <div class="card px-5 py-5 shadow">
+			            <div class="text-center">
+			              <i
+			                class="bi bi-chat-dots text-muted"
+			                style="font-size: 400%"
+			              ></i>
+			              <h2>
+			                Non sono stata effettuate prenotazioni per questo appello.<br />
+			                <a href="javascript:void(0);" class="btnBack">Seleziona un nuovo appello</a>
+			              </h2>
+			              <p>oppure</p>
+			            </div>
+			            <div class="text-center"><a href="logout">Logout/Torna alla home</a></div>
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    <% }} %>
 	</div>
 
 
@@ -302,7 +338,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 	                window.history.back();
 	            });
 	        });
-	  });  	      
+	  });
     </script>    
   </body>
 </html>

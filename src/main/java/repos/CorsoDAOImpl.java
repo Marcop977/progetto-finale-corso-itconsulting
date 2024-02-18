@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,15 +61,18 @@ public class CorsoDAOImpl implements CorsoDAO {
 	}
 
 	@Override
-	public void addCorso(Corso c, Professore p) {
+	public void addCorso(String materia, int cattedra) {
 		try {
 			this.ps = this.db.getConnessione().prepareStatement(ADD);
-			this.ps.setString(1, c.getMateria());
-			this.ps.setInt(2, p.getIdProfessore());
+			this.ps.setString(1, materia);
+			this.ps.setInt(2, cattedra);
 			this.ps.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (e instanceof SQLSyntaxErrorException) {
+				System.err.println("Errore di sintassi SQL: verifica la query.");
+			}
 		}
 
 	}
@@ -79,9 +83,15 @@ public class CorsoDAOImpl implements CorsoDAO {
 	}
 
 	@Override
-	public void deleteCorso(int idCorso) {
-		// TODO Auto-generated method stub
-
+	public void deleteCorsoById(int idCorso) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_ID);
+			this.ps.setInt(1, idCorso);
+			this.ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -100,6 +110,27 @@ public class CorsoDAOImpl implements CorsoDAO {
 		        e.printStackTrace();
 		 }	
 
+	}
+
+	@Override
+	public boolean isCPresente(String materia) {
+		boolean esiste = false;
+		
+		try {
+			this.ps = db.getConnessione().prepareStatement(FIND_BY_MATERIA);
+			this.ps.setString(1, materia);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next())
+				esiste = true;
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		return esiste;
 	}
 
 

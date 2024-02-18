@@ -189,7 +189,7 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	            p.setIdPrenotazione(idPren);
 	            p.setAppPrenotato(a);
 	        } else {
-	        	System.out.println("rs non trovato");
+	        	System.out.println("rs non trovato aaaa");
 	        }
 	        
 	    } catch (SQLException e) {

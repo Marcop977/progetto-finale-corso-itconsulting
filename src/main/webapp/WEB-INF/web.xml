@@ -79,4 +79,54 @@
     <servlet-name>AddProfessoreCtrl</servlet-name>
     <url-pattern>/AddProfessoreCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteProfCtrl</display-name>
+    <servlet-name>DeleteProfCtrl</servlet-name>
+    <servlet-class>presentation.DeleteProfCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteProfCtrl</servlet-name>
+    <url-pattern>/DeleteProfCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddCorsoCtrl</display-name>
+    <servlet-name>AddCorsoCtrl</servlet-name>
+    <servlet-class>presentation.AddCorsoCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddCorsoCtrl</servlet-name>
+    <url-pattern>/AddCorsoCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteCorsoCtrl</display-name>
+    <servlet-name>DeleteCorsoCtrl</servlet-name>
+    <servlet-class>presentation.DeleteCorsoCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteCorsoCtrl</servlet-name>
+    <url-pattern>/DeleteCorsoCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddAppelloCtrl</display-name>
+    <servlet-name>AddAppelloCtrl</servlet-name>
+    <servlet-class>presentation.AddAppelloCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddAppelloCtrl</servlet-name>
+    <url-pattern>/AddAppelloCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteAppelloCtrl</display-name>
+    <servlet-name>DeleteAppelloCtrl</servlet-name>
+    <servlet-class>presentation.DeleteAppelloCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteAppelloCtrl</servlet-name>
+    <url-pattern>/DeleteAppelloCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

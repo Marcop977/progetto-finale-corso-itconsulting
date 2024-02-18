@@ -28,13 +28,27 @@ public class AppelloDAOImpl implements AppelloDAO {
 		List<Appello> appelli = new ArrayList<>();
 		
 		try {
-			this.ps = this.db.getConnessione().prepareStatement(FIND_ALL);
+			this.ps = this.db.getConnessione().prepareStatement(FIND_CORSO_APP);
 			this.rs = this.ps.executeQuery();
 			
 			while (rs.next()) {
-				int idAppello = rs.getInt(1);
-				Date data = rs.getDate(2);
-				Corso c = (Corso) rs.getObject(3);
+				int idAppello = rs.getInt("idAppello");
+				Date data = rs.getDate("data");
+				int corsoId = rs.getInt("appello.materia");
+				int idCorso = rs.getInt("idcorso");
+				String nomeMateria = rs.getString("corso.materia");
+				String nomeProf = rs.getString("nome");
+				String cognomeProf = rs.getString("cognome");
+				int cattedra = rs.getInt("appello.materia");
+				
+				Professore p = new Professore();
+				p.setNome(nomeProf);
+				p.setCognome(cognomeProf);
+				
+				Corso c = new Corso();
+				c.setMateria(nomeMateria);
+				c.setIdCorso(corsoId);
+				c.setProfessore(p);
 				
 				Appello a = new Appello();
 				a.setIdAppello(idAppello);
@@ -61,9 +75,16 @@ public class AppelloDAOImpl implements AppelloDAO {
 	}
 
 	@Override
-	public void addAppello(Appello a) {
-		// TODO Auto-generated method stub
-
+	public void addAppello(String data, int idCorso) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(ADD);
+			this.ps.setString(1, data);
+			this.ps.setInt(2, idCorso);
+			this.ps.executeUpdate();		
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -74,8 +95,17 @@ public class AppelloDAOImpl implements AppelloDAO {
 
 	@Override
 	public void deleteAppello(int idAppello) {
-		// TODO Auto-generated method stub
-
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_PRENOT);
+			this.ps.setInt(1, idAppello);
+			this.ps.executeUpdate();
+			
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_ID);
+			this.ps.setInt(1, idAppello);
+			this.ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -137,14 +167,15 @@ public class AppelloDAOImpl implements AppelloDAO {
 		
 		try {
 			this.ps = db.getConnessione().prepareStatement(FIND_BY_PROF);
+			System.out.println(p);
 			this.ps.setInt(1, p.getIdProfessore());
 			this.rs = this.ps.executeQuery();
 			
 			while (rs.next()) {
-				int idCorso = this.rs.getInt(1);
-				String nomeMateria = this.rs.getString(2);
-				int idAppello = this.rs.getInt(3);
-				Date data = this.rs.getDate(4);
+				int idCorso = this.rs.getInt("idcorso");
+				String nomeMateria = this.rs.getString("corso.materia");
+				int idAppello = this.rs.getInt("idAppello");
+				Date data = this.rs.getDate("data");
 				
 				Corso c = new Corso();
 				c.setIdCorso(idCorso);
@@ -157,6 +188,7 @@ public class AppelloDAOImpl implements AppelloDAO {
 				a.setIdAppello(idAppello);
 				
 				appelli.add(a);
+				System.out.println("Appello: " + a);
 			}
 			
 			
@@ -207,6 +239,23 @@ public class AppelloDAOImpl implements AppelloDAO {
 		}
 		
 		return appelli;
+	}
+
+	@Override
+	public boolean isPrenPresente(int idAppello) {
+		boolean esiste = false;
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_PRENOT);
+			this.ps.setInt(1, idAppello);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next())
+				esiste = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return esiste;
 	}
 
 }

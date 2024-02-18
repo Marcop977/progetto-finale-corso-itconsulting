@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Date;
 import java.util.List;
 
 import repos.AppelloDAO;
@@ -18,8 +19,8 @@ public class AppelloServiceImpl implements AppelloService {
 	}
 
 	@Override
-	public void addAppello(Appello a) {
-		this.dao.addAppello(a);
+	public void addAppello(String data, int idCorso) {
+		this.dao.addAppello(data, idCorso);
 	}
 
 	@Override
@@ -45,6 +46,11 @@ public class AppelloServiceImpl implements AppelloService {
 	@Override
 	public List<Appello> getAppelliCorsi() {
 		return this.dao.findCorsiApp();
+	}
+
+	@Override
+	public boolean isPrenPresente(int idAppello) {
+		return this.dao.isPrenPresente(idAppello);
 	}
 
 }
