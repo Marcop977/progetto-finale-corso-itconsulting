@@ -53,4 +53,9 @@ public class AppelloServiceImpl implements AppelloService {
 		return this.dao.isPrenPresente(idAppello);
 	}
 
+	@Override
+	public boolean isAppPresente(int idCorso, Date data) {
+		return this.dao.isAppPresente(idCorso, data);
+	}
+
 }

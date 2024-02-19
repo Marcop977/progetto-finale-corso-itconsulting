@@ -2,12 +2,19 @@
 <%@page import="model.Professore"%>
 <%@page import="model.Studente"%>
 <%@page import="model.Corso"%>
+<%@page import="model.Prenotazione"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ page import="presentation.AddStudenteCtrl"%>
     <%@ page import="presentation.AddProfessoreCtrl"%>
      <%@ page import="presentation.AddCorsoCtrl"%>
      <%@ page import="presentation.AddAppelloCtrl"%>
+     <%@ page import="presentation.AddPrenotazioneCtrl"%>
+     <%@page import="java.text.SimpleDateFormat" %>
+     <%@page import="java.util.List" %>
+     <%@ page import="java.util.Collections" %>
+<%@ page import="java.util.Comparator" %>
+     
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,7 +42,8 @@
    <% String tabellaAttiva = (String) session.getAttribute("tabellaAttiva");
    if (tabellaAttiva == null) {
 	    tabellaAttiva = "studente";
-	} %>
+	}
+   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");%>
   
  <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
@@ -92,15 +100,15 @@
     
     <!-- scelta azione -->
 	<div class="container">
-		<button id="btnStud" class="bottone" data-tabella-id="studente">Aggiungi Studente</button>
-		<button id="btnProf" class="bottone" data-tabella-id="professore">Aggiungi Professore</button>
-		<button id="btnCorso" class="bottone" data-tabella-id="corso">Aggiungi Corso</button>
-		<button id="btnAppello" class="bottone" data-tabella-id="appello">Aggiungi Appello</button>
+		<div class="btn-group">
+			<button id="btnStud" class="bottone" data-tabella-id="studente">Aggiungi Studente</button>
+			<button id="btnProf" class="bottone" data-tabella-id="professore">Aggiungi Professore</button>
+			<button id="btnCorso" class="bottone" data-tabella-id="corso">Aggiungi Corso</button>
+			<button id="btnAppello" class="bottone" data-tabella-id="appello">Aggiungi Appello</button>
+			<button id="btnPren" class="bottone" data-tabella-id="prenotazione">Aggiungi Prenotazione</button>
+		</div>
 	</div>
 	<input type="hidden" id="tabellaAttivaInput" name="tabellaAttiva" value="0">
-	
-	
-	<!-- anziché usare javascript, provare a nascondere/mostrare le tabelle con post per ciascun bottone, andando a settare tabellaAttiva -->
 
 
 	<!-- aggiungi studente -->
@@ -129,7 +137,7 @@
 		
 		<div class="col-md-1"></div>
 		
-		<% AddStudenteCtrl controller = new AddStudenteCtrl();%>	
+		<% AddStudenteCtrl studenteController = new AddStudenteCtrl();%>	
 		<div class="col-md-7">
 		<table class="table shadow">
 			<thead>
@@ -142,7 +150,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<% for (Studente s : controller.mostraStudenti()) { %>
+				<% for (Studente s : studenteController.mostraStudenti()) { %>
 				<tr>
 					<th scope="row" class="p-4"><%= s.getMatricola() %></th>
 					<td><%= s.getNome() + " " + s.getCognome() %></td>
@@ -335,7 +343,7 @@
 				<% for (Appello a : appelloController.mostraAppelli()) {%>
 				<tr>
 					<th scope="row" class="p-4"><%=a.getIdAppello() %></th>
-					<td><%=a.getData() %></td>
+					<td><%=sdf.format(a.getData()) %></td>
 					<td><%=a.getCorsoId().getMateria() %></td>
 					<td><%=a.getCorsoId().getProfessore().getNome() + " " + a.getCorsoId().getProfessore().getCognome() %></td>
 					<td>
@@ -352,6 +360,106 @@
 		</div>
 	</div>
 	
+	
+	<!-- aggiungi prenotazione -->
+	<div class="container my-5 prenotazione tabella">
+		<div class="row">
+			<div class="col-md-4 d-flex flex-column">
+				<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+					<h3 class="mb-4">Aggiungi prenotazione</h3>
+					<form action="addPrenotazione" method="post">
+						<div class="w-100">
+							<label>Studente:</label>
+							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="matricola">
+							    <option selected disabled>-- Seleziona uno studente --</option>
+							    <%
+							    List<Studente> studenti = studenteController.mostraStudenti();
+							    Collections.sort(studenti, new Comparator<Studente>() {
+							        @Override
+							        public int compare(Studente s1, Studente s2) {
+							        	String nomeStud1 = s1.getNome();
+							        	String nomeStud2 = s2.getNome();
+							        	
+							            return nomeStud1.compareTo(nomeStud2);
+							        }
+							    });
+							    %>
+							    <% for (Studente s : studenti) { %>
+							    <option value="<%=s.getMatricola() %>"><%=s.getNome() + " " + s.getCognome() %></option>
+							    <% } %>
+							</select>
+							<label>Appello:</label>
+							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idAppello">
+							    <option selected disabled>-- Seleziona un appello --</option>
+							    <%
+							    List<Appello> appelli = appelloController.mostraAppelli();
+							    Collections.sort(appelli, new Comparator<Appello>() {
+							        @Override
+							        public int compare(Appello a1, Appello a2) {							        	
+							            return a1.getData().compareTo(a2.getData());
+							        }
+							    });
+							    %>
+							    <% for (Appello a : appelli) {%>
+							    <option value="<%=a.getIdAppello() %>"><%=a.getCorsoId().getMateria() + " - " + sdf.format(a.getData()) %></option>
+							    <% } %>
+							</select>
+							<input type="submit" value="Aggiungi" class="btn btn-success w-100 btnControllo">
+							<div class="text-danger erroreFeedback"></div> 
+						</div>
+					</form>
+				</div>
+				<a href="logout" class="mb-3">Logout/Torna alla home</a>
+			</div>
+				
+			<div class="col-md-1"></div>
+			
+			<div class="col-md-7">
+			<table class="table shadow">
+							<thead>
+								<tr>
+									<th scope="col" class="th-corsi bg-primary text-light">ID prenotazione</th>
+									<th scope="col" class="th-corsi bg-primary text-light">Studente</th>
+									<th scope="col" class="th-corsi bg-primary text-light">Corso</th>
+									<th scope="col" class="th-corsi bg-primary text-light">Data</th>
+									<th scope="col" class="th-corsi bg-primary text-light">Docente</th>
+									<th scope="col" class="th-corsi bg-primary text-light"></th>
+								</tr>
+							</thead>
+							<tbody>
+							<% 
+							AddPrenotazioneCtrl prenotazioneController = new AddPrenotazioneCtrl();
+							List<Prenotazione> prenotazioni = prenotazioneController.mostraPrenotazioni();
+							
+						    Collections.sort(prenotazioni, new Comparator<Prenotazione>() {
+						        @Override
+						        public int compare(Prenotazione p1, Prenotazione p2) {
+						            return p1.getAppPrenotato().getData().compareTo(p2.getAppPrenotato().getData());
+						        }
+						    });
+							%>
+							
+							<% for (Prenotazione p : prenotazioni) { %>
+								<tr>
+									<th scope="row" class="p-4"><%=p.getIdPrenotazione() %></th>
+									<td><%=p.getStudPrenotato().getNome() + " " + p.getStudPrenotato().getCognome() %></td>
+									<td><%=p.getAppPrenotato().getCorsoId().getMateria() %></td>
+									<td><%=sdf.format(p.getAppPrenotato().getData()) %></td>
+									<td><%=p.getAppPrenotato().getCorsoId().getProfessore().getNome() + " " + p.getAppPrenotato().getCorsoId().getProfessore().getCognome() %></td>
+									<td>
+									<form action="deletePrenotazione" method="post">
+										<input type="hidden" name="idpren" value="<%=p.getIdPrenotazione() %>">
+										<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+									</form>
+									</td>
+								</tr>
+								<% } %>
+							</tbody>
+						</table>	
+				
+			</div>
+		</div>
+	</div>
 	
 	
 	<!-- Footer -->

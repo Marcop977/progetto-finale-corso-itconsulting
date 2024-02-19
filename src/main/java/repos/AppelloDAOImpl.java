@@ -258,4 +258,23 @@ public class AppelloDAOImpl implements AppelloDAO {
 		return esiste;
 	}
 
+	@Override
+	public boolean isAppPresente(int idCorso, Date data) {
+		boolean esiste = false;
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_APP);
+			this.ps.setInt(1, idCorso);
+			this.ps.setDate(2, data);
+			this.rs = this.ps.executeQuery();
+			if (this.rs.next())
+				esiste = true;
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return esiste;
+	}
+
 }

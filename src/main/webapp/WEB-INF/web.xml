@@ -129,4 +129,24 @@
     <servlet-name>DeleteAppelloCtrl</servlet-name>
     <url-pattern>/DeleteAppelloCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddPrenotazioneCtrl</display-name>
+    <servlet-name>AddPrenotazioneCtrl</servlet-name>
+    <servlet-class>presentation.AddPrenotazioneCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddPrenotazioneCtrl</servlet-name>
+    <url-pattern>/AddPrenotazioneCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeletePrenCtrl</display-name>
+    <servlet-name>DeletePrenCtrl</servlet-name>
+    <servlet-class>presentation.DeletePrenCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeletePrenCtrl</servlet-name>
+    <url-pattern>/DeletePrenCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

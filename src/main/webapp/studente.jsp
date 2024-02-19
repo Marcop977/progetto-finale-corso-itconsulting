@@ -13,6 +13,8 @@
 <%@page import="java.time.LocalDate" %>
 <%@page import="java.time.LocalDateTime" %>
 <%@page import="java.time.LocalTime" %>
+<%@page import="java.text.SimpleDateFormat" %>
+<%@page import="java.time.format.DateTimeFormatter" %>
 
 
 <!DOCTYPE html>
@@ -101,14 +103,36 @@
     </nav>
 
     <!-- benvenuto -->
-    <div class="bg-primary p-5">
+    <div class="bg-primary p-5 mb-5">
       <div class="container text-center">
         <h1 class="text-light">Area personale - Studente - <%=tabellaNome %></h1>
       </div>
     </div>
 
    <!-- tabella corsi -->
-   <div id="tabella1" class="bg-light p-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
+   <div id="tabella1" class="bg-light pb-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
+  				 <% if (corsoCtrl.mostraCorsi().isEmpty()) { %>
+   				<div class="container my-5 pb-5">
+			      <div class="row justify-content-center">
+			        <div class="col-md-6">
+			          <div class="card px-5 py-5 shadow">
+			            <div class="text-center">
+			              <i
+			                class="bi bi-chat-dots text-muted"
+			                style="font-size: 400%"
+			              ></i>
+			              <h2>
+			                Non ci sono corsi disponibili.<br />
+			                Torna fra qualche istante
+			              </h2>
+			              <p>oppure</p>
+			            </div>
+			            <div class="text-center"><a href="logout">Logout/Torna alla home</a></div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			    <% } else { %>
 	    <div class="container"><h2 class="m-0 ps-2"> Tabella corsi</h2></div>
 	    <div class="container mt-4 mb-5">
 	      <table class="table shadow">
@@ -141,15 +165,16 @@
 	    <div class="container pt-5 text-end">
 	    <a href="logout">Logout</a>
 	    </div>
+	<% } %>
 	</div>
 	
 			  
 		  
-		  
+		  <% SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); %>
 		<!-- appelli disponibili -->
-		<div id="tabella2" class="bg-light px-5 pt-5 pb-0" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
 		<% List<Appello> appelli = (List<Appello>) request.getAttribute("appelli"); %>
-		<% if (appelli != null) { %>
+		<div id="tabella2" class="bg-light pb-5" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
+		<% if (appelli != null && !appelli.isEmpty()) { %>
 				<% for (Appello a : appelli) { %>
 				<div class="container">
 		      <h2 class="m-0 ps-2">
@@ -169,10 +194,11 @@
 		        </thead>
 		        <% break; }%>
 		        <tbody>
+		        
 		        <% for (Appello a : appelli) { %>
 		          <tr>
 		            <th scope="row" class="p-4"><%= a.getIdAppello() %></th>
-		            <td><%= a.getData() %></td>
+		            <td><%= sdf.format(a.getData()) %></td>
 		            <td class="ms-5"><%= a.getCorsoId().getMateria() %></td>
 		            <td><%= a.getCorsoId().getProfessore().getNome() + " " + a.getCorsoId().getProfessore().getCognome()%></td>
 		            <td>
@@ -188,17 +214,47 @@
 		        </tbody>
 		      </table>
 		    </div>
-			<div class="container py-5 d-flex justify-content-between">
-			    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
+			<div class="container d-flex justify-content-between pt-5">
+			    <a href="javascript:void(0);" class="btnBack">Visualizza i corsi</a>
 			    <a href="logout">Logout/Torna alla home</a>
 		    </div>
-		<% } %>
+		<% } else { %>
+		<div class="container my-5">
+			      <div class="row justify-content-center">
+			        <div class="col-md-6">
+			          <div class="card px-5 py-5 shadow">
+			            <div class="text-center">
+			              <i
+			                class="bi bi-chat-dots text-muted"
+			                style="font-size: 400%"
+			              ></i>
+			              <h2>
+			                Non ci sono appelli disponibili per il corso selezionato.<br />
+			                <a href="javascript:void(0);" class="btnBack">Seleziona un nuovo appello</a>
+			              </h2>
+			              <p>oppure</p>
+			            </div>
+			            <div class="text-center"><a href="logout">Logout/Torna alla home</a></div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			    <% } %>
 		</div>
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		<% PrenotazioneCtrl controllerPrenot = new PrenotazioneCtrl(); 
 		Prenotazione p = (Prenotazione) request.getAttribute("prenotazione"); 
-		LocalDateTime oggi = LocalDateTime.now(); %>
+		LocalDateTime oggi = LocalDateTime.now(); 
+		DateTimeFormatter dataGiusta = DateTimeFormatter.ofPattern("dd/MM/yyyy 'alle ore' HH:mm"); %>
 		
 		<div id="tabella3" <% if (tabellaAttiva != 3) out.print("style=\"display:none;\""); %>>
 		        <% if (p != null) {%>
@@ -210,7 +266,7 @@
 		            <div class="col-md-6 pt-1">
 		                <h4 class="mb-3" style="font-weight: normal;">
 		                  Studente: <span style="text-decoration: underline;"><%=p.getStudPrenotato().getNome() + " " + p.getStudPrenotato().getCognome() %></span> <br />
-		                  Prenotazione effettuata in data: <br /><%=oggi.toLocalDate() %> alle ore <%=oggi.getHour() + ":" + oggi.getMinute() %><br>
+		                  Prenotazione effettuata in data: <br /><%=oggi.format(dataGiusta) %><br>
 		                </h4>
 		                <h4 style="font-weight: normal;">Per il seguente appello:</h4>
 		            </div>
@@ -218,8 +274,8 @@
 		            <div class="col-md-4">
 		                <strong class="fs-4">Materia:</strong>
 		                <p class="fs-4"><%= p.getAppPrenotato().getCorsoId().getMateria() %></p>
-		                <strong class="fs-4">Data:</strong>
-		                <p class="fs-4"><%= p.getAppPrenotato().getData() %></p>
+		                <strong class="fs-4">Data appello:</strong>
+		                <p class="fs-4"><%= sdf.format(p.getAppPrenotato().getData()) %></p>
 		                <strong class="fs-4">Nome - Cognome:</strong>
 		                <p class="fs-4"><%= p.getStudPrenotato().getNome() + " " + p.getStudPrenotato().getCognome()%></p>
 		            </div>
@@ -233,10 +289,7 @@
 		      <a href="javascript:void(0);" class="btnBack mb-5">Prenota nuovo appello</a>
 		      <a href="logout">Logout/Torna alla home</a>
 		    </div>
-	        	<% } %>
-		</div>
-		
-			<% if (prenExists != null) {%>
+			<% } else {%>
 				<div class="container my-5 pb-5">
 			      <div class="row justify-content-center">
 			        <div class="col-md-6">
@@ -259,6 +312,8 @@
 			    </div>
 		
 			<% } %>
+		</div>
+		
 		
 
 	
@@ -363,7 +418,7 @@
                 window.history.back();
             });
         });
-    });    
+    });
     </script>
 </body>
 </html>

@@ -33,11 +33,11 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	}
 
 	@Override
-	public void addPrenByApp(Studente s, int idAppello) { //studente in sessione e appello inserito dall'utente
+	public void addPrenotazione(int matricola, int idAppello) { //studente in sessione e appello inserito dall'utente
 		
 		try {
 			this.ps = this.db.getConnessione().prepareStatement(ADD);
-			this.ps.setInt(1, s.getMatricola());
+			this.ps.setInt(1, matricola);
 			this.ps.setInt(2, idAppello);
 			this.ps.executeUpdate();
 
@@ -55,8 +55,13 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 
 	@Override
 	public void deletePrenotazione(int idpren) {
-		// TODO Auto-generated method stub
-		
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_ID);
+			this.ps.setInt(1, idpren);
+			this.ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -126,13 +131,13 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	}
 
 	@Override
-	public boolean isPrenExists(Studente s, int idAppello) {
+	public boolean isPrenExists(int matricola, int idAppello) {
 		
 		boolean prenotazioneEsistente = false;
 		
 		try {
 			this.ps = db.getConnessione().prepareStatement(PREN_EXISTS);
-			this.ps.setInt(1, s.getMatricola());
+			this.ps.setInt(1, matricola);
 			this.ps.setInt(2, idAppello);
 			
 			this.rs = this.ps.executeQuery();
@@ -208,6 +213,57 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	    }
 	    
 	    return p;
+	}
+
+	@Override
+	public List<Prenotazione> findAll() {
+		List<Prenotazione> prenotazioni = new ArrayList<>();
+		
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_ALL_JOIN);
+			this.rs = this.ps.executeQuery();
+			while (this.rs.next()) {
+				int idPren = this.rs.getInt("idpren");
+				int studPren = this.rs.getInt("stud_prenotato");
+				int appPren = this.rs.getInt("app_prenotato");
+				int matricola = this.rs.getInt("matricola");
+				String nomeStud = this.rs.getString(8);
+				String cognomeStud = this.rs.getString(9);
+				Date data = this.rs.getDate("data");
+				String nomeCorso = this.rs.getString("corso.materia");
+				String nomeProf = this.rs.getString(20);
+				String cognomeProf = this.rs.getString(21);
+				
+				Professore prof = new Professore();
+				prof.setNome(nomeProf);
+				prof.setCognome(cognomeProf);
+				
+				Corso c = new Corso();
+				c.setMateria(nomeCorso);
+				c.setProfessore(prof);
+				
+				Appello a = new Appello();
+				a.setData(data);
+				a.setCorsoId(c);
+				
+				Studente s = new Studente();
+				s.setMatricola(matricola);
+				s.setNome(nomeStud);
+				s.setCognome(cognomeStud);
+				
+				Prenotazione pren = new Prenotazione();
+				pren.setIdPrenotazione(idPren);
+				pren.setAppPrenotato(a);
+				pren.setStudPrenotato(s);
+				
+				prenotazioni.add(pren);				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return prenotazioni;
 	}
 
 

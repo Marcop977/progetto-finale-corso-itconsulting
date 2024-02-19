@@ -78,6 +78,7 @@
       </div>
     </nav>
 
+	<% String erroreLogin = (String) request.getAttribute("erroreLogin"); %>
     <!-- modal -->
     <form action="login" method="post">
       <div
@@ -106,7 +107,7 @@
                   class="form-control"
                   id="modal-email"
                   placeholder="Enter username"
-                  name="username"
+                  name="username" required
                 />
               </div>
               <div class="mb-3">
@@ -116,12 +117,12 @@
                   class="form-control"
                   id="modal-password"
                   placeholder="Enter Password"
-                  name="password"
+                  name="password" required
                 />
                 <i
-                  class="bi bi-eye-slash position-absolute top-60 end-0 translate-middle-y me-5"
+                  class="bi bi-eye-slash position-absolute end-0 translate-middle-y me-5"
                   id="hiddenEye"
-                  style="padding-bottom: 2.5rem; cursor: pointer; display: block"
+                  style="padding-bottom: 2.4rem; cursor: pointer; display: block"
                 ></i>
               </div>
               <div
@@ -157,6 +158,13 @@
         </div>
       </div>
     </form>
+    
+    <!-- alert login -->
+    <% if (erroreLogin != null) { %>
+	<div class="alert alert-danger fixed-bottom w-50 text-center ms-auto">
+		<div><h2><%=erroreLogin %></h2></div>
+	</div>
+	<% } %>
 
     <!-- swiper -->
       <div class="swiper" id="swiper-1">
@@ -396,6 +404,10 @@
 	<%session.removeAttribute("professore");%>
 		});
 		})
+		
+		setTimeout(() => {
+			document.querySelector(".alert").style.display = "none";
+		}, 5000);
 	</script>
 </body>
 </html>

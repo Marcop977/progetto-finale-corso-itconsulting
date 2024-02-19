@@ -11,14 +11,14 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
 	
 	PrenotazioneDAO dao = new PrenotazioneDAOImpl();
 
-//	@Override
-//	public List<Prenotazione> getPrenotazioni() {
-//		return this.dao.findAll();
-//	}
+	@Override
+	public List<Prenotazione> getPrenotazioni() {
+		return this.dao.findAll();
+	}
 
 	@Override
-	public void addPrenByApp(Studente s, int idAppello) {
-		this.dao.addPrenByApp(s, idAppello);
+	public void addPrenotazione(int matricola, int idAppello) {
+		this.dao.addPrenotazione(matricola, idAppello);
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
 	}
 
 	@Override
-	public boolean isPrenExists(Studente s, int idAppello) {
-		return this.dao.isPrenExists(s, idAppello);
+	public boolean isPrenExists(int matricola, int idAppello) {
+		return this.dao.isPrenExists(matricola, idAppello);
 	}
 
 	@Override

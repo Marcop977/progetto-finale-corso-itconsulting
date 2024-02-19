@@ -32,20 +32,17 @@ public class PrenotazioneCtrl extends HttpServlet {
 		
 		if (request.getParameter("appello") != null) {
 			int idAppello = Integer.parseInt(request.getParameter("appello"));
-			System.out.println("idAppello: " + idAppello);
 			session = request.getSession(true);
 			Studente s = (Studente) session.getAttribute("studente");
-			System.out.println("Studente Parametro: " + s.getMatricola());
-			boolean esiste = service.isPrenExists(s, idAppello);
+			boolean esiste = service.isPrenExists(s.getMatricola(), idAppello);
 			
 			if (!esiste) {
-				service.addPrenByApp(s, idAppello);;
+				service.addPrenotazione(s.getMatricola(), idAppello);;
 				Prenotazione p = service.getPrenByAppStud(idAppello, s); //dato l'appello prenotato e lo studente in sessione, dammi la prenotazione
 				request.setAttribute("prenotazione", p);
 				request.setAttribute("tabellaAttiva", 3);
-				System.out.println(p);
 			} else {
-				request.setAttribute("tabellaAttiva", 2);
+				request.setAttribute("tabellaAttiva", 3);
 				request.setAttribute("errore", "a");
 			}
 			request.getRequestDispatcher("studente.jsp").forward(request, response);

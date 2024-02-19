@@ -85,6 +85,27 @@ public class CorsoDAOImpl implements CorsoDAO {
 	@Override
 	public void deleteCorsoById(int idCorso) {
 		try {
+			//voglio cancellare un corso che ha un appello collegato, che è a sua volta collegato ad una prenotazione
+			int idAppello = 0;
+			//trovo l'appello collegato al corso
+			this.ps = this.db.getConnessione().prepareStatement(FIND_APP);
+			this.ps.setInt(1, idCorso);
+			this.rs = this.ps.executeQuery();
+			while (this.rs.next()) {
+				idAppello = this.rs.getInt(1);
+				//cancello le prenotazioni collegate all'appello. Lo metto nel while poiché ci sono più appelli con id diverso collegati alla stessa materia
+				this.ps = this.db.getConnessione().prepareStatement(DELETE_PREN);
+				this.ps.setInt(1, idAppello);
+				this.ps.executeUpdate();
+			}
+			
+			
+			//cancello gli appelli collegati al corso
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_APP);
+			this.ps.setInt(1, idCorso);
+			this.ps.executeUpdate();
+			
+			//cancello il corso
 			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_ID);
 			this.ps.setInt(1, idCorso);
 			this.ps.executeUpdate();

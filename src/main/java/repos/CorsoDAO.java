@@ -11,6 +11,9 @@ public interface CorsoDAO {
 	String ADD = "INSERT INTO corso (materia, cattedra) VALUES (?, ?)";
 	String UPDATE = "UPDATE corso SET materia = ?, cattedra = ?";
 	String DELETE_BY_ID = "DELETE FROM corso WHERE idcorso = ?";
+	String DELETE_APP = "DELETE FROM appello WHERE materia = ?";
+	String FIND_APP = "SELECT idAppello FROM appello WHERE materia = ?";
+	String DELETE_PREN = "DELETE FROM prenotazione WHERE app_prenotato = ?";
 	String FIND_PROF_JOIN = "SELECT idProfessore, username, password, nome, cognome FROM professore JOIN corso ON idProfessore = cattedra WHERE cattedra = ?";
 	String FIND_ALL = "SELECT idcorso, idProfessore, materia, nome, cognome FROM corso JOIN professore ON cattedra = idProfessore";
 	String FIND_BY_MATERIA = "SELECT * FROM corso WHERE materia = ?"; //se la materia esiste già, non me la aggiungere, poiché è possibile che lo stesso prof faccia più corsi, ma 1 corso non può essere sostenuto da più prof

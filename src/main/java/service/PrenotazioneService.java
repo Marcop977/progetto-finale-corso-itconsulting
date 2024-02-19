@@ -7,11 +7,11 @@ import model.Studente;
 
 public interface PrenotazioneService {
 	
-//	List<Prenotazione> getPrenotazioni();
+	List<Prenotazione> getPrenotazioni();
 	List<Prenotazione> getPrenByAppId(int idAppello);
 	Prenotazione getPrenByAppStud(int idAppello, Studente s);
-	void addPrenByApp(Studente s, int idAppello);
-	boolean isPrenExists(Studente s, int idAppello);
+	void addPrenotazione(int matricola, int idAppello);
+	boolean isPrenExists(int matricola, int idAppello);
 	void deletePrenotazione(int idpren);
 	void close();
 

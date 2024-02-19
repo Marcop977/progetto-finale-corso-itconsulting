@@ -9,6 +9,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 <%@page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.Comparator" %>
+<%@page import="java.text.SimpleDateFormat" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
     if (tabellaAttiva != 1)
     	tabellaNome = "Prenotazioni";
     else
-    	tabellaNome = "Corsi";		
+    	tabellaNome = "Corsi";	
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     %>
 
     <!-- navbar -->
@@ -94,7 +96,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
       </div>
     </div>
 
-    <!-- tabella corsi -->	
+    <!-- tabella corsi -->
 	<div class="container my-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
 
 		<% if (appelloController.mostraAppelliByProf(p).isEmpty()) { %>
@@ -135,7 +137,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
         <% if (a != null) { %>
 	          <tr>
 	            <th scope="row"><%= a.getIdAppello() %></th>
-                <td><%= a.getData() %></td>
+                <td><%= sdf.format(a.getData()) %></td>
                 <td><%= a.getCorsoId().getMateria() %></td>
                 <td>
 	            	<form action="prenotazioni" method="post">

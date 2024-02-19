@@ -15,6 +15,7 @@ public interface AppelloService {
 	void addAppello(String data, int idCorso);
 	void deleteAppelloById(int idAppello);
 	boolean isPrenPresente(int idAppello);
+	boolean isAppPresente(int idCorso, Date data);
 	void close();
 
 }

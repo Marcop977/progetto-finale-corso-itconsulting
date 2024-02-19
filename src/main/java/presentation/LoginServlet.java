@@ -47,31 +47,36 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 
 		HttpSession session = request.getSession(true);
-
-		Studente s = service.getStudenteByUserPass(username, password);
-		if (s != null) {
-		    request.setAttribute("tabellaAttiva", 1);
-		    session.setAttribute("studente", s);
-		    request.getRequestDispatcher("studente.jsp").forward(request, response);
-		    return;
+		
+		if (username != "" || password != "") {
+			Studente s = service.getStudenteByUserPass(username, password);
+			if (s != null) {
+				request.setAttribute("tabellaAttiva", 1);
+				session.setAttribute("studente", s);
+				request.getRequestDispatcher("studente.jsp").forward(request, response);
+				return;
+			}
+			
+			Professore p = service2.getProfByUserPass(username, password);
+			if (p != null) {
+				request.setAttribute("tabellaAttiva", 1);
+				session.setAttribute("professore", p);
+				request.getRequestDispatcher("professore.jsp").forward(request, response);
+				return;
+			}
+			
+			Admin a = service4.getAdminByUsern(username, password);
+			if (a != null) {
+				request.setAttribute("tabellaAttiva", 1);
+				session.setAttribute("admin", a);
+				request.getRequestDispatcher("segreteria.jsp").forward(request, response);
+				return;
+			}
+			
+			request.setAttribute("erroreLogin", "Credenziali non valide. Si prega di riprovare.");
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 
-		Professore p = service2.getProfByUserPass(username, password);
-		if (p != null) {
-		    request.setAttribute("tabellaAttiva", 1);
-		    session.setAttribute("professore", p);
-		    System.out.println("professore: " + p);
-		    request.getRequestDispatcher("professore.jsp").forward(request, response);
-		    return;
-		}
-
-		Admin a = service4.getAdminByUsern(username, password);
-		if (a != null) {
-		    request.setAttribute("tabellaAttiva", 1);
-		    session.setAttribute("admin", a);
-		    request.getRequestDispatcher("segreteria.jsp").forward(request, response);
-		    return;
-		}
 
 //		boolean studenteTrovato = false;
 //		boolean profTrovato = false;
