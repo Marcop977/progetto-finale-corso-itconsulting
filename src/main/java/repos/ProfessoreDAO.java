@@ -10,7 +10,8 @@ public interface ProfessoreDAO {
 	String FIND_BY_ID = "SELECT * FROM professore WHERE idProfessore = ?";
 	String ADD = "INSERT INTO professore (username, password, tipo_utente, nome, cognome) VALUES (?, ?, ?, ?, ?)";
 	String FIND_BY_USERPASS = "SELECT * FROM professore WHERE username = ? AND password = ?";
-	String UPDATE = "UPDATE professore SET username = ?, password = ?, tipo_utente = ?, nome = ?, cognome = ?";
+	String FIND_BY_TIPO = "SELECT * FROM professore WHERE tipo_utente = ?";
+	String UPDATE = "UPDATE professore SET username = ?, password = ?, nome = ?, cognome = ? WHERE idProfessore = ?";
 	String DELETE_BY_ID = "DELETE FROM professore WHERE idProfessore = ?";
 	String FIND_BY_NOME_COGNOME = "SELECT idProfessore, nome, cognome FROM professore WHERE nome = ? AND cognome = ?";
 	String DELETE_CORSO_COLLEGATO = "DELETE FROM corso WHERE cattedra = ?";
@@ -21,7 +22,8 @@ public interface ProfessoreDAO {
 	void addProfessore(Professore p);
 	boolean isPresente(String username, String password);
 	boolean isPresenteConNome(String nome, String cognome);
-	void updateProfessore(Professore p);
+	boolean isProfessore(char tipo);
+	void updateProfessore(int idProfessore, String username, String password, String nome, String cognome);
 	void deleteProfessoreById(int idProfessore);
 	int findProfByNameSur(String nome, String cognome);
 	void closeConnection();

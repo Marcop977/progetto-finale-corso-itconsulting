@@ -40,4 +40,14 @@ public class StudenteServiceImpl implements StudenteService {
 		return this.dao.findByUserPass(u, p);
 	}
 
+	@Override
+	public void updateStudente(int m, String n, String c, String u, String p) {
+		this.dao.updateStudente(m, n, c, u, p);
+	}
+
+	@Override
+	public boolean isStudente(char tipo) {
+		return this.dao.isStudente(tipo);
+	}
+
 }

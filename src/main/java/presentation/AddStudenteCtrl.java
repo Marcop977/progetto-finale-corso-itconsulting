@@ -35,7 +35,6 @@ public class AddStudenteCtrl extends HttpServlet{
 			String password = request.getParameter("password");
 			String nome = request.getParameter("nome");
 			String cognome = request.getParameter("cognome");
-			System.out.println(username + password);
 			
 			if (!service.isStudentePresente(username, password)) {
 				session = request.getSession(true);

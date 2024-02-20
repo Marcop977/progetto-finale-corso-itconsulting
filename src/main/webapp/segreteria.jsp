@@ -112,32 +112,54 @@
 
 
 	<!-- aggiungi studente -->
-	<div class="container my-5 studente tabella" data-tabella="studente">
+	<div class="container my-5 studente tabella" >
 		<div class="row">
 		<div class="col-md-4 d-flex flex-column">
-			<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+			<div class="bg-white p-5 rounded-3 shadow formAggiungi studenteAggiungi" style="margin-bottom: 100px">
 				<h3 class="mb-4">Aggiungi studente</h3>
 				<form action="addStudente" method="post">
 					<div class="w-100">
 						<label>Nome:</label>
-						<input type="text" name="nome" placeholder="Inserisci nome" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="nome" placeholder="Inserisci nome" class="form-control bg-light compilaCampo" maxlength="45"><br>
 						<label>Cognome:</label>
-						<input type="text" name="cognome" placeholder="Inserisci cognome" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="cognome" placeholder="Inserisci cognome" class="form-control bg-light compilaCampo" maxlength="45"><br>
 						<label>Username:</label>
-						<input type="text" name="username" placeholder="Inserisci username" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="username" placeholder="Inserisci username" class="form-control bg-light compilaCampo" maxlength="10"><br>
 						<label>Password:</label>
-						<input type="text" name="password" placeholder="Inserisci password" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="password" placeholder="Inserisci password" class="form-control bg-light compilaCampo" maxlength="5"><br>
 						<input type="submit" value="Aggiungi" class="btn btn-success w-100 btnControllo">
-						<div class="text-danger erroreFeedback"></div> 
+						<div class="text-danger erroreFeedback"></div>
 					</div>
 				</form>
 			</div>
+			<div class="p-5 rounded-3 shadow formModifica studenteModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+				<h3 class="mb-4">Modifica studente</h3>
+				<form action="updateRecord" method="post">
+					<div class="w-100">
+						<input type="hidden" name="idUtente" class="form-control compilaCampo">
+						<label>Nome:</label>
+						<input type="text" name="nomeModifica" placeholder="Inserisci nome" class="form-control compilaCampo" maxlength="45"><br>
+						<label>Cognome:</label>
+						<input type="text" name="cognomeModifica" placeholder="Inserisci cognome" class="form-control compilaCampo" maxlength="45"><br>
+						<label>Username:</label>
+						<input type="text" name="usernameModifica" placeholder="Inserisci username" class="form-control compilaCampo" maxlength="10"><br>
+						<label>Password:</label>
+						<input type="text" name="passwordModifica" placeholder="Inserisci password" class="form-control compilaCampo" maxlength="5"><br>
+						<input type="hidden" name="tipo_utente" class="form-control compilaCampo">
+						<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo mb-3">
+						<input type="button" value="Annulla" class="btn btn-secondary w-100">
+						<div class="text-danger erroreFeedback"></div>
+					</div>
+				</form>
+			</div>
+			
+			
 			<a href="logout" class="mb-3">Logout/Torna alla home</a>
 		</div>
 		
 		<div class="col-md-1"></div>
 		
-		<% AddStudenteCtrl studenteController = new AddStudenteCtrl();%>	
+		<% AddStudenteCtrl studenteController = new AddStudenteCtrl(); %>
 		<div class="col-md-7">
 		<table class="table shadow">
 			<thead>
@@ -156,12 +178,20 @@
 					<td><%= s.getNome() + " " + s.getCognome() %></td>
 					<td><%= s.getUsername() %></td>
 					<td><%= s.getPassword() %></td>
-					<td>
-					<form action="deleteStudente" method="post">
-						<input type="hidden" name="matricola" value="<%=s.getMatricola() %>">
-						<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
-					</form>
-					</td>
+					
+					<td style="display: none"><%= s.getTipoUtente() %></td>
+					
+					<td class="align-middle">
+				        <div class="d-inline-block me-2">
+				        	<button class="btn btn-success btnEdit"><i class="bi bi-pencil-square fs-5"></i></button>
+				        </div>
+				        <div class="d-inline-block">
+				            <form action="deleteStudente" method="post">
+				                <input type="hidden" name="matricola" value="<%=s.getMatricola() %>">
+				                <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+				            </form>
+				        </div>
+				    </td>
 				</tr>
 				<% } %>
 			</tbody>
@@ -175,25 +205,46 @@
 		<div class="row">
 		
 		<div class="col-md-4 d-flex flex-column">
-			<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+			<div class="bg-white p-5 rounded-3 shadow formAggiungi professoreAggiungi" style="margin-bottom: 100px">
 				<h3 class="mb-4">Aggiungi docente</h3>
 				<form action="addProfessore" method="post">
 					<div class="w-100">
 						<label>Nome:</label>
-						<input type="text" name="nome" placeholder="Inserisci nome" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="nome" placeholder="Inserisci nome" class="form-control bg-light compilaCampo" maxlength="45"><br>
 						<label>Cognome:</label>
-						<input type="text" name="cognome" placeholder="Inserisci cognome" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="cognome" placeholder="Inserisci cognome" class="form-control bg-light compilaCampo" maxlength="45"><br>
 						<label>Username:</label>
-						<input type="text" name="username" placeholder="Inserisci username" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="username" placeholder="Inserisci username" class="form-control bg-light compilaCampo" maxlength="10"><br>
 						<label>Password:</label>
-						<input type="text" name="password" placeholder="Inserisci password" class="form-control bg-light compilaCampo"><br>
+						<input type="text" name="password" placeholder="Inserisci password" class="form-control bg-light compilaCampo" maxlength="5"><br>
 						<input type="submit" value="Aggiungi" class="btn btn-success w-100 btnControllo">
 						<div class="text-danger erroreFeedback"></div> 
 					</div>
 				</form>
 			</div>
+			<div class="p-5 rounded-3 shadow formModifica professoreModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+				<h3 class="mb-4">Modifica docente</h3>
+				<form action="updateRecord" method="post">
+					<div class="w-100">
+						<input type="hidden" name="idUtente" class="form-control compilaCampo">
+						<label>Nome:</label>
+						<input type="text" name="nomeModifica" placeholder="Inserisci nome" class="form-control compilaCampo" maxlength="45"><br>
+						<label>Cognome:</label>
+						<input type="text" name="cognomeModifica" placeholder="Inserisci cognome" class="form-control compilaCampo" maxlength="45"><br>
+						<label>Username:</label>
+						<input type="text" name="usernameModifica" placeholder="Inserisci username" class="form-control compilaCampo" maxlength="10"><br>
+						<label>Password:</label>
+						<input type="text" name="passwordModifica" placeholder="Inserisci password" class="form-control compilaCampo" maxlength="5"><br>
+						<input type="hidden" name="tipo_utente" class="form-control compilaCampo">
+						<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo mb-3">
+						<input type="button" value="Annulla" class="btn btn-secondary w-100">
+						<div class="text-danger erroreFeedback"></div>
+					</div>
+				</form>
+			</div>
 			<a href="logout" class="mb-3">Logout/Torna alla home</a>
 		</div>
+		
 		
 		<div class="col-md-1"></div>
 		
@@ -217,11 +268,19 @@
 					<td><%=p.getNome() + " " + p.getCognome() %></td>
 					<td><%=p.getUsername() %></td>
 					<td><%=p.getPassword() %></td>
+					<td style="display: none"><%=p.getTipoUtente() %></td>
 					<td>
-					<form action="deleteProfessore" method="post">
-						<input type="hidden" name="idProfessore" value="<%=p.getIdProfessore() %>">
-						<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
-					</form>
+						<div class="align-middle">
+							<div class="d-inline-block me-2">
+						        	<button class="btn btn-success btnEdit"><i class="bi bi-pencil-square fs-5"></i></button>
+						    </div>
+						    <div class="d-inline-block">
+								<form action="deleteProfessore" method="post">
+									<input type="hidden" name="idProfessore" value="<%=p.getIdProfessore() %>">
+									<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+								</form>
+							</div>
+						</div>
 					</td>
 				</tr>
 				<% } %>
@@ -232,15 +291,15 @@
 	</div>
 	
 	<!-- aggiungi corso -->
-	<div class="container my-5 corso tabella" data-tabella="studente">
+	<div class="container my-5 corso tabella" data-tabella="corso">
 		<div class="row">
 			<div class="col-md-4 d-flex flex-column">
-				<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+				<div class="bg-white p-5 rounded-3 shadow formAggiungi corsoAggiungi" style="margin-bottom: 100px">
 					<h3 class="mb-4">Aggiungi corso</h3>
 					<form action="addCorso" method="post">
 						<div class="w-100">
 							<label>Corso:</label>
-							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control bg-light compilaCampo"><br>
+							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control bg-light compilaCampo" maxlength="25"><br>
 							<label>Docente:</label>
 							  <select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idProfessore">
 							    <option selected disabled>-- Seleziona un docente --</option>
@@ -253,6 +312,27 @@
 						</div>
 					</form>
 				</div>
+				<div class="bg-white p-5 rounded-3 shadow formModifica corsoModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+					<h3 class="mb-4">Modifica corso</h3>
+					<form action="updateCorso" method="post">
+						<div class="w-100">
+							<label>Corso:</label>
+							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control bg-light compilaCampo" maxlength="25"><br>
+							<label>Docente:</label>
+							  <select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idProfessore">
+							    <option selected disabled>-- Seleziona un docente --</option>
+							    <% for (Professore p : controller1.mostraProfessori()) { %>
+							    <option value="<%=p.getIdProfessore() %>"><%=p.getNome() + " " + p.getCognome() %></option>
+							    <% } %>
+							  </select>
+							<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo">
+							<div class="text-danger erroreFeedback"></div> 
+						</div>
+					</form>
+				</div>
+				
+				
+				
 				<a href="logout" class="mb-3">Logout/Torna alla home</a>
 			</div>
 				
@@ -276,10 +356,17 @@
 									<td><%=c.getMateria() %></td>
 									<td><%=c.getProfessore().getNome() + " " + c.getProfessore().getCognome() %></td>
 									<td>
-									<form action="deleteCorso" method="post">
-										<input type="hidden" name="idCorso" value="<%=c.getIdCorso() %>">
-										<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
-									</form>
+									<div class="align-middle">
+										<div class="d-inline-block me-2">
+											<button class="btn btn-success btnEdit"><i class="bi bi-pencil-square fs-5"></i></button>
+										</div>
+										<div class="d-inline-block">
+											<form action="deleteCorso" method="post">
+												<input type="hidden" name="idCorso" value="<%=c.getIdCorso() %>">
+												<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+											</form>
+										</div>
+									</div>
 									</td>
 								</tr>
 								<% } %>
@@ -374,15 +461,7 @@
 							    <option selected disabled>-- Seleziona uno studente --</option>
 							    <%
 							    List<Studente> studenti = studenteController.mostraStudenti();
-							    Collections.sort(studenti, new Comparator<Studente>() {
-							        @Override
-							        public int compare(Studente s1, Studente s2) {
-							        	String nomeStud1 = s1.getNome();
-							        	String nomeStud2 = s2.getNome();
-							        	
-							            return nomeStud1.compareTo(nomeStud2);
-							        }
-							    });
+							    
 							    %>
 							    <% for (Studente s : studenti) { %>
 							    <option value="<%=s.getMatricola() %>"><%=s.getNome() + " " + s.getCognome() %></option>
@@ -431,12 +510,7 @@
 							AddPrenotazioneCtrl prenotazioneController = new AddPrenotazioneCtrl();
 							List<Prenotazione> prenotazioni = prenotazioneController.mostraPrenotazioni();
 							
-						    Collections.sort(prenotazioni, new Comparator<Prenotazione>() {
-						        @Override
-						        public int compare(Prenotazione p1, Prenotazione p2) {
-						            return p1.getAppPrenotato().getData().compareTo(p2.getAppPrenotato().getData());
-						        }
-						    });
+						    
 							%>
 							
 							<% for (Prenotazione p : prenotazioni) { %>
@@ -571,6 +645,9 @@
 	    	
 	    	let tabellaClasse = bottone.dataset.tabellaId;
 	    	document.querySelector("." + tabellaClasse).style.display = "block";
+	    	document.querySelector("." + tabellaClasse + "Aggiungi").style.display = "block";
+	    	console.log(document.querySelector("." + tabellaClasse + "Aggiungi"))
+	    	document.querySelector("." + tabellaClasse + "Modifica").style.display = "none";
     	})
     })	
 	
@@ -643,6 +720,101 @@
 	        });
 	    });
 	});
+    
+    /*
+    document.querySelectorAll(".btnEdit").forEach(button => {
+    	button.addEventListener("click", function() {
+	    	console.log("Ciao");
+	    	const formAggiungi = document.querySelector(".formAggiungi")
+	    	const formModifica = document.querySelector(".formModifica");
+	    	formAggiungi.style.display = "none";
+	    	formModifica.style.display = "block";
+	    	
+	    	//formAggiungi.style.display = formAggiungi.style.display === "none" ? "block" : "none";
+	    	//formModifica.style.display = formModifica.style.display === "none" ? "block" : "none";
+	    	
+	    	const tds = this.closest("tr").querySelectorAll("td");
+	    	const th = tds[0].parentNode.querySelector("th");
+	    	
+	        const inputs = formModifica.querySelectorAll("input:not([type='submit']):not([type='button'])");
+	    	inputs[0].value = th.textContent;
+	        const nomeCognome = tds[0].textContent.trim().split(" ");
+	        
+	        if (inputs.length >= 2) {
+	            inputs[1].value = nomeCognome[0];
+	            inputs[2].value = nomeCognome[1] || "";
+	        }
+	        
+	        for (let i = 3; i < inputs.length; i++) {
+	            inputs[i].value = tds[i - 2].textContent.trim();
+	        }
+	        
+	        const inputButton = formModifica.querySelector("input[type='button']");
+			inputButton.addEventListener("click", function() {
+				formModifica.style.display = "none";
+				document.querySelector(".formAggiungi").style.display = "block";
+			})
+    	})
+    })*/
+    
+    document.querySelectorAll(".btnEdit").forEach(button => {
+    	button.addEventListener("click", function() {
+	    	console.log("Ciao");
+	    	const formAggiungiLista = document.querySelectorAll(".formAggiungi")
+	    	const formModificaLista = document.querySelectorAll(".formModifica");
+	    	
+	    	
+	    	formAggiungiLista.forEach(formAggiungi => {
+	            formAggiungi.style.display = "none";
+	        });
+	    	const formModifica = button.closest(".row").querySelector(".formModifica");
+
+	        if (formModifica) {
+	            formModifica.style.display = "block";
+	        }
+	        
+	        
+	        const tds = button.closest("tr").querySelectorAll("td");
+            const th = tds[0].parentNode.querySelector("th");
+            const inputs = formModifica.querySelectorAll("input:not([type='submit']):not([type='button'])");
+            inputs[0].value = th.textContent;
+            const nomeCognome = tds[0].textContent.trim().split(" ");
+            if (inputs.length >= 2) {
+                inputs[1].value = nomeCognome[0];
+                inputs[2].value = nomeCognome[1] || "";
+            }
+            for (let i = 3; i < inputs.length; i++) {
+                inputs[i].value = tds[i - 2].textContent.trim();
+            }
+            
+            const inputButton = formModifica.querySelector("input[type='button']");
+            inputButton.addEventListener("click", function() {
+                formModifica.style.display = "none";
+                document.querySelector(".formAggiungi").style.display = "block";
+            });	            
+    	})
+    })
+
+    /*
+    document.querySelectorAll(".btnEdit").forEach(bottone => {
+    	bottone.addEventListener("click", function(){
+    		const form = bottone.closest("td").querySelector(".editForm");
+    		this.style.display = "none";
+    		form.style.display = "block";
+    		const row = bottone.closest("tr");
+    		const tds = Array.from(row.querySelectorAll("td")).slice(0, -1);
+    		const inputNames = ["nomeCognome", "username", "password"];
+    		tds.forEach((td, index) => {
+    		    const input = document.createElement("input"); // Creiamo un nuovo elemento input
+    		    input.type = "text"; // Impostiamo il tipo di input
+    		    input.value = td.textContent.trim(); // Impostiamo il valore del campo di input al contenuto del td
+    		    input.name = inputNames[index];
+    		    td.textContent = ""; // Cancella il contenuto del td
+    		    td.appendChild(input); // Aggiungi l'input al td
+    		});
+    	})
+    })*/
+    
 
 	
     /*
@@ -711,6 +883,26 @@
 	        });
 	    }
 	});
+	*/
+	
+	/*
+	Collections.sort(prenotazioni, new Comparator<Prenotazione>() { //tabella prenotazioni
+						        @Override
+						        public int compare(Prenotazione p1, Prenotazione p2) {
+						            return p1.getAppPrenotato().getData().compareTo(p2.getAppPrenotato().getData());
+						        }
+						    });
+	
+	
+	Collections.sort(studenti, new Comparator<Studente>() { //tabella prenotazioni
+    @Override
+    public int compare(Studente s1, Studente s2) {
+    	String nomeStud1 = s1.getNome();
+    	String nomeStud2 = s2.getNome();
+    	
+        return nomeStud1.compareTo(nomeStud2);
+    }
+});
 	*/
 
     </script>

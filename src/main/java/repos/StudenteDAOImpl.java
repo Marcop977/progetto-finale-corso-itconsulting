@@ -73,14 +73,27 @@ public class StudenteDAOImpl implements StudenteDAO {
 	}
 
 	@Override
-	public void updateStudente(Studente s) {
-		// TODO Auto-generated method stub
-
+	public void updateStudente(int matricola, String nome, String cognome, String username, String password) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(UPDATE);
+			this.ps.setString(1, username);
+			this.ps.setString(2, password);
+			this.ps.setString(3, nome);
+			this.ps.setString(4, cognome);
+			this.ps.setInt(5, matricola);
+			this.ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteStudente(int matricola) {
 		try {
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_PREN);
+			this.ps.setInt(1, matricola);
+			this.ps.executeUpdate();
+			
 			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_ID);
 			this.ps.setInt(1, matricola);
 			this.ps.executeUpdate();		
@@ -153,6 +166,25 @@ public class StudenteDAOImpl implements StudenteDAO {
 			e.printStackTrace();
 		}
 		return s;
+	}
+
+	@Override
+	public boolean isStudente(char tipo) {
+		boolean esiste = false;
+		
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_BY_TIPO);
+			this.ps.setString(1, String.valueOf(tipo));
+			this.rs = this.ps.executeQuery();
+			
+			if (this.rs.next())
+				esiste = true;
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return esiste;
 	}
 
 }

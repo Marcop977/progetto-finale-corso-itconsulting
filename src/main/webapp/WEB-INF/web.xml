@@ -149,4 +149,14 @@
     <servlet-name>DeletePrenCtrl</servlet-name>
     <url-pattern>/DeletePrenCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditStudenteCtrl</display-name>
+    <servlet-name>EditStudenteCtrl</servlet-name>
+    <servlet-class>presentation.EditStudenteCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditStudenteCtrl</servlet-name>
+    <url-pattern>/EditStudenteCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

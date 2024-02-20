@@ -51,5 +51,15 @@ public class ProfessoreServiceImpl implements ProfessoreService {
 	public Professore getProfByUserPass(String u, String p) {
 		return this.dao.findByUserPass(u, p);
 	}
+
+	@Override
+	public boolean isProfessore(char tipo) {
+		return this.dao.isProfessore(tipo);
+	}
+
+	@Override
+	public void updateProfessore(int id, String u, String p, String n, String c) {
+		this.dao.updateProfessore(id, u, p, n, c);
+	}
 	
 }

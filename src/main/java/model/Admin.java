@@ -5,7 +5,7 @@ public class Admin {
 	private int idAdmin;
 	private String username;
 	private String password;
-	private char tipoUtente;
+	private char tipoUtente = 'a';
 	private String nome;
 	private String cognome;
 	public Admin() {}

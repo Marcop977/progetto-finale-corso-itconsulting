@@ -72,12 +72,6 @@ public class ProfessoreDAOImpl implements ProfessoreDAO {
 	}
 
 	@Override
-	public void updateProfessore(Professore p) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void deleteProfessoreById(int idProfessore) {
 		try {
 			this.ps = conn.getConnessione().prepareStatement(DELETE_CORSO_COLLEGATO);
@@ -187,6 +181,39 @@ public class ProfessoreDAOImpl implements ProfessoreDAO {
 		}
 		
 		return prof;
+	}
+
+	@Override
+	public boolean isProfessore(char tipo) {
+		boolean esiste = false;
+		try {
+			this.ps = this.conn.getConnessione().prepareStatement(FIND_BY_TIPO);
+			this.ps.setString(1, String.valueOf(tipo));
+			this.rs = this.ps.executeQuery();
+			
+			if (this.rs.next())
+				esiste = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return esiste;
+	}
+
+	@Override
+	public void updateProfessore(int idProfessore, String username, String password, String nome, String cognome) {
+		try {
+			this.ps = this.conn.getConnessione().prepareStatement(UPDATE);
+			this.ps.setString(1, username);
+			this.ps.setString(2, password);
+			this.ps.setString(3, nome);
+			this.ps.setString(4, cognome);
+			this.ps.setInt(5, idProfessore);
+			this.ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

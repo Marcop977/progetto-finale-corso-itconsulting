@@ -5,7 +5,7 @@ public class Professore {
 	private int idProfessore;
 	private String username;
 	private String password;
-	private char tipoUtente;
+	private char tipoUtente = 'p';
 	private String nome;
 	private String cognome;
 	

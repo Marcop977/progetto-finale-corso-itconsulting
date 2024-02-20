@@ -5,7 +5,7 @@ public class Studente {
 	private int matricola;
 	private String username;
 	private String password;
-	private char tipoUtente;
+	private char tipoUtente = 's';
 	private String nome;
 	private String cognome;
 	
