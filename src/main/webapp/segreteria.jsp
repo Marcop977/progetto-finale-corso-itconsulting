@@ -294,12 +294,12 @@
 	<div class="container my-5 corso tabella" data-tabella="corso">
 		<div class="row">
 			<div class="col-md-4 d-flex flex-column">
-				<div class="bg-white p-5 rounded-3 shadow formAggiungi corsoAggiungi" style="margin-bottom: 100px">
+				<div class="bg-white p-5 rounded-3 shadow corsoAggiungi" style="margin-bottom: 100px">
 					<h3 class="mb-4">Aggiungi corso</h3>
 					<form action="addCorso" method="post">
 						<div class="w-100">
 							<label>Corso:</label>
-							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control bg-light compilaCampo" maxlength="25"><br>
+							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control compilaCampo" maxlength="25"><br>
 							<label>Docente:</label>
 							  <select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idProfessore">
 							    <option selected disabled>-- Seleziona un docente --</option>
@@ -312,12 +312,12 @@
 						</div>
 					</form>
 				</div>
-				<div class="bg-white p-5 rounded-3 shadow formModifica corsoModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+				<div class="p-5 rounded-3 shadow corsoModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
 					<h3 class="mb-4">Modifica corso</h3>
-					<form action="updateCorso" method="post">
+					<form action="updateRecord" method="post">
 						<div class="w-100">
 							<label>Corso:</label>
-							<input type="text" name="corso" placeholder="Inserisci corso" class="form-control bg-light compilaCampo" maxlength="25"><br>
+							<input type="text" name="corsoNome" placeholder="Inserisci corso" class="form-control bg-light compilaCampo" maxlength="25"><br>
 							<label>Docente:</label>
 							  <select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idProfessore">
 							    <option selected disabled>-- Seleziona un docente --</option>
@@ -325,7 +325,9 @@
 							    <option value="<%=p.getIdProfessore() %>"><%=p.getNome() + " " + p.getCognome() %></option>
 							    <% } %>
 							  </select>
-							<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo">
+							<input type="hidden" name="idCorso" class="form-control compilaCampo">
+							<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo mb-3">
+							<input type="button" class="btn btn-secondary w-100" value="Annulla">
 							<div class="text-danger erroreFeedback"></div> 
 						</div>
 					</form>
@@ -358,7 +360,7 @@
 									<td>
 									<div class="align-middle">
 										<div class="d-inline-block me-2">
-											<button class="btn btn-success btnEdit"><i class="bi bi-pencil-square fs-5"></i></button>
+											<button class="btn btn-success btnEditCorso"><i class="bi bi-pencil-square fs-5"></i></button>
 										</div>
 										<div class="d-inline-block">
 											<form action="deleteCorso" method="post">
@@ -388,7 +390,7 @@
 	<div class="container my-5 appello tabella" data-tabella="studente">
 		<div class="row">
 		<div class="col-md-4 d-flex flex-column">
-			<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+			<div class="bg-white p-5 rounded-3 shadow appelloAggiungi" style="margin-bottom: 100px">
 				<h3 class="mb-4">Aggiungi appello</h3>
 				<form action="addAppello" method="post">
 					<div class="w-100">
@@ -401,13 +403,33 @@
 							<option value="<%=c.getIdCorso() %>"><%=c.getMateria() %></option>
 							<% } %>
 						</select>
-						
-						
 						<input type="submit" value="Aggiungi" class="btn btn-success w-100 btnControllo">
 						<div class="text-danger erroreFeedback"></div> 
 					</div>
 				</form>
 			</div>
+			<div class="p-5 rounded-3 shadow appelloModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+				<h3 class="mb-4">Modifica appello</h3>
+				<form action="updateRecord" method="post">
+					<div class="w-100">
+						<label>Data appello:</label>
+						<input type="date" name="data" placeholder="Inserisci data" class="form-control compilaCampo"><br>
+						<label>Corso:</label>
+						<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idCorsoAppello">
+							<option selected disabled>-- Seleziona corso --</option>
+							<% for (Corso c : corsoController.mostraCorsi()) {%>
+							<option value="<%=c.getIdCorso() %>"><%=c.getMateria() %></option>
+							<% } %>
+						</select>
+						<input type="hidden" name="idAppello" class="form-control compilaCampo">
+						<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo mb-3">
+						<input type="button" class="btn btn-secondary w-100" value="Annulla">
+						<div class="text-danger erroreFeedback"></div> 
+					</div>
+				</form>
+			</div>
+			
+			
 			<a href="logout" class="mb-3">Logout/Torna alla home</a>
 		</div>
 		
@@ -434,10 +456,17 @@
 					<td><%=a.getCorsoId().getMateria() %></td>
 					<td><%=a.getCorsoId().getProfessore().getNome() + " " + a.getCorsoId().getProfessore().getCognome() %></td>
 					<td>
-					<form action="deleteAppello" method="post">
-						<input type="hidden" name="idAppello" value="<%=a.getIdAppello() %>">
-						<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
-					</form>
+						<div class="align-middle">
+							<div class="d-inline-block me-2">
+								<button class="btn btn-success btnEditAppello"><i class="bi bi-pencil-square fs-5"></i></button>
+							</div>
+							<div class="d-inline-block">
+								<form action="deleteAppello" method="post">
+									<input type="hidden" name="idAppello" value="<%=a.getIdAppello() %>">
+									<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+								</form>
+							</div>
+						</div>
 					</td>
 				</tr>
 				<% } %>
@@ -449,20 +478,18 @@
 	
 	
 	<!-- aggiungi prenotazione -->
+	<% List<Studente> studenti = studenteController.mostraStudenti(); %>
+	<% List<Appello> appelli = appelloController.mostraAppelli(); %>
 	<div class="container my-5 prenotazione tabella">
 		<div class="row">
 			<div class="col-md-4 d-flex flex-column">
-				<div class="bg-white p-5 rounded-3 shadow" style="margin-bottom: 100px">
+				<div class="bg-white p-5 rounded-3 shadow prenotazioneAggiungi" style="margin-bottom: 100px">
 					<h3 class="mb-4">Aggiungi prenotazione</h3>
 					<form action="addPrenotazione" method="post">
 						<div class="w-100">
 							<label>Studente:</label>
 							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="matricola">
 							    <option selected disabled>-- Seleziona uno studente --</option>
-							    <%
-							    List<Studente> studenti = studenteController.mostraStudenti();
-							    
-							    %>
 							    <% for (Studente s : studenti) { %>
 							    <option value="<%=s.getMatricola() %>"><%=s.getNome() + " " + s.getCognome() %></option>
 							    <% } %>
@@ -471,7 +498,6 @@
 							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idAppello">
 							    <option selected disabled>-- Seleziona un appello --</option>
 							    <%
-							    List<Appello> appelli = appelloController.mostraAppelli();
 							    Collections.sort(appelli, new Comparator<Appello>() {
 							        @Override
 							        public int compare(Appello a1, Appello a2) {							        	
@@ -488,6 +514,40 @@
 						</div>
 					</form>
 				</div>
+				<div class="p-5 rounded-3 shadow prenotazioneModifica" style="display: none; margin-bottom: 100px; border: 1px solid black">
+					<h3 class="mb-4">Modifica prenotazione</h3>
+					<form action="updateRecord" method="post">
+						<div class="w-100">
+							<label>Studente:</label>
+							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="matricolaPren">
+							    <option selected disabled>-- Seleziona uno studente --</option>
+							    <% for (Studente s : studenti) { %>
+							    <option value="<%=s.getMatricola() %>" class="options-studente"><%=s.getNome() + " " + s.getCognome() %></option>
+							    <% } %>
+							</select>
+							<label>Appello:</label>
+							<select class="form-select mb-4 compilaCampo" aria-label="Seleziona un'opzione" name="idAppelloPren">
+							    <option selected disabled class="options-appello">-- Seleziona un appello --</option>
+							    <%
+							    Collections.sort(appelli, new Comparator<Appello>() {
+							        @Override
+							        public int compare(Appello a1, Appello a2) {							        	
+							            return a1.getData().compareTo(a2.getData());
+							        }
+							    });
+							    %>
+							    <% for (Appello a : appelli) {%>
+							    <option value="<%=a.getIdAppello() %>" class="options-appello"><%=a.getCorsoId().getMateria() + " - " + sdf.format(a.getData()) %></option>
+							    <% } %>
+							</select>
+							<input type="hidden" name="idPrenotazione" class="form-control compilaCampo">
+							<input type="submit" value="Modifica" class="btn btn-success w-100 btnControllo mb-3">
+							<input type="button" class="btn btn-secondary w-100" value="Annulla">
+							<div class="text-danger erroreFeedback"></div> 
+						</div>
+					</form>
+				</div>
+				
 				<a href="logout" class="mb-3">Logout/Torna alla home</a>
 			</div>
 				
@@ -521,10 +581,17 @@
 									<td><%=sdf.format(p.getAppPrenotato().getData()) %></td>
 									<td><%=p.getAppPrenotato().getCorsoId().getProfessore().getNome() + " " + p.getAppPrenotato().getCorsoId().getProfessore().getCognome() %></td>
 									<td>
-									<form action="deletePrenotazione" method="post">
-										<input type="hidden" name="idpren" value="<%=p.getIdPrenotazione() %>">
-										<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
-									</form>
+										<div class="align-middle">
+											<div class="d-inline-block me-2">
+												<button class="btn btn-success btnEditPren"><i class="bi bi-pencil-square fs-5"></i></button>
+											</div>
+											<div class="d-inline-block">
+												<form action="deletePrenotazione" method="post">
+													<input type="hidden" name="idpren" value="<%=p.getIdPrenotazione() %>">
+													<button type="submit" class="btn btn-danger"><i class="bi bi-trash3 fs-5"></i></button>
+												</form>
+											</div>
+										</div>
 									</td>
 								</tr>
 								<% } %>
@@ -757,20 +824,23 @@
     	})
     })*/
     
+    //form modifica di studente e professore. Li faccio insieme poiché gli input sono gli stessi e nello stesso ordine dei td
     document.querySelectorAll(".btnEdit").forEach(button => {
     	button.addEventListener("click", function() {
 	    	console.log("Ciao");
 	    	const formAggiungiLista = document.querySelectorAll(".formAggiungi")
 	    	const formModificaLista = document.querySelectorAll(".formModifica");
 	    	
-	    	
-	    	formAggiungiLista.forEach(formAggiungi => {
-	            formAggiungi.style.display = "none";
-	        });
+	    	const formAggiungi = button.closest(".row").querySelector(".formAggiungi");
 	    	const formModifica = button.closest(".row").querySelector(".formModifica");
 
+	    	if (formAggiungi) {
+	            formAggiungi.style.display = formAggiungi.style.display === "none" ? "block" : "none";
+	        }
+	    	
+	    	
 	        if (formModifica) {
-	            formModifica.style.display = "block";
+	            formModifica.style.display = formModifica.style.display === "none" ? "block" : "none";
 	        }
 	        
 	        
@@ -787,13 +857,135 @@
                 inputs[i].value = tds[i - 2].textContent.trim();
             }
             
-            const inputButton = formModifica.querySelector("input[type='button']");
-            inputButton.addEventListener("click", function() {
+            const btnAnnulla = formModifica.querySelector("input[type='button']");
+            btnAnnulla.addEventListener("click", function() {
                 formModifica.style.display = "none";
-                document.querySelector(".formAggiungi").style.display = "block";
+                formAggiungi.style.display = "block";
             });	            
     	})
     })
+    
+    //per corso ne faccio un altro separato poiché il numero di campi e l'ordine è diverso
+    document.querySelectorAll(".btnEditCorso").forEach(button => {
+	    button.addEventListener("click", function() {
+	    	
+	    	const formModifica = document.querySelector(".corsoModifica");
+	    	const formAggiungi = document.querySelector(".corsoAggiungi");
+	    	
+	    	formAggiungi.style.display = formAggiungi.style.display === "none" ? "block" : "none";
+	    	formModifica.style.display = formModifica.style.display === "none" ? "block" : "none";
+	    	
+	    	const tds = this.closest("tr").querySelectorAll("td");
+	    	const th = tds[0].parentNode.querySelector("th");
+	    	const inputs = formModifica.querySelectorAll("input:not([type='submit']):not([type='button'])");
+	    	const options = formModifica.querySelectorAll("option");
+	    	
+	    	for (let i = 0; i < options.length; i++) {
+	    		if (options[i].textContent == tds[1].textContent.trim()) {
+	    			options[i].selected = true;
+	    		}
+	    	}
+	    	
+	    	inputs[0].value = tds[0].textContent.trim();
+	    	inputs[1].value = th.textContent.trim();
+	    	
+	    	const btnAnnulla = formModifica.querySelector("input[type='button']");
+            btnAnnulla.addEventListener("click", function() {
+                formModifica.style.display = "none";
+                formAggiungi.style.display = "block";
+            });
+	    	
+	    })
+    	
+    })
+    
+    //modifica appello
+    document.querySelectorAll(".btnEditAppello").forEach(button => {
+		button.addEventListener("click", function() {
+	    	
+	    	const formModifica = document.querySelector(".appelloModifica");
+	    	const formAggiungi = document.querySelector(".appelloAggiungi");
+	    	
+	    	formAggiungi.style.display = formAggiungi.style.display === "none" ? "block" : "none";
+	    	formModifica.style.display = formModifica.style.display === "none" ? "block" : "none";
+	    	
+	    	const tds = this.closest("tr").querySelectorAll("td");
+	    	const th = tds[0].parentNode.querySelector("th");
+	    	const inputs = formModifica.querySelectorAll("input:not([type='submit']):not([type='button'])");
+			console.log(inputs)
+			const dataNonCorretta = tds[0].textContent.trim();
+			const dataSplittata = dataNonCorretta.split("/");
+			const giorno = dataSplittata[0];
+			const mese = dataSplittata[1];
+			const anno = dataSplittata[2];
+			
+			const dataCorretta = anno + "-" + mese + "-" + giorno;
+			
+	    	inputs[0].value = dataCorretta; //data
+	    	const options = formModifica.querySelectorAll("option"); //corso
+	    	for (let i = 0; i < options.length; i++) {
+	    		if (options[i].textContent == tds[1].textContent.trim()) {
+	    			options[i].selected = true;
+	    		}
+	    	}
+	    	
+	    	inputs[1].value = th.textContent.trim(); //id
+	    	
+	    	const btnAnnulla = formModifica.querySelector("input[type='button']");
+	    	console.log(btnAnnulla)
+            btnAnnulla.addEventListener("click", function() {
+            	console.log("ciao")
+                formModifica.style.display = "none";
+                formAggiungi.style.display = "block";
+            });
+	    	
+	    })
+    	
+    })
+    
+    //modifica prenotazione
+    document.querySelectorAll(".btnEditPren").forEach(button => {
+	    button.addEventListener("click", function() {
+	    	
+	    	const formModifica = document.querySelector(".prenotazioneModifica");
+	    	const formAggiungi = document.querySelector(".prenotazioneAggiungi");
+	    	
+	    	formAggiungi.style.display = formAggiungi.style.display === "none" ? "block" : "none";
+	    	formModifica.style.display = formModifica.style.display === "none" ? "block" : "none";
+	    	
+	    	const tds = this.closest("tr").querySelectorAll("td");
+	    	const options = formModifica.querySelectorAll("option");
+	    	const optionsStudente = formModifica.querySelectorAll(".options-studente");
+	    	const optionsAppello = formModifica.querySelectorAll(".options-appello")
+	    	const th = tds[0].parentNode.querySelector("th");
+	    	
+	    	const inputIdPren = document.querySelector('[name="idPrenotazione"]')
+	    	console.log(inputIdPren + "aaa")
+	    	inputIdPren.value = th.textContent.trim();
+	    	
+	    	for (let i = 0; i < optionsStudente.length; i++) {
+	    		if (optionsStudente[i].textContent == tds[0].textContent.trim()) {
+	    			optionsStudente[i].selected = true;
+	    		}
+	    	}
+	    	for (let i = 0; i < optionsAppello.length; i++) {
+	    		if (optionsAppello[i].textContent == (tds[1].textContent.trim() + " - " + tds[2].textContent.trim())) {
+	    		    optionsAppello[i].selected = true;
+	    		}
+	    	}
+	    	
+	    	
+	    	const btnAnnulla = formModifica.querySelector("input[type='button']");
+            btnAnnulla.addEventListener("click", function() {
+                formModifica.style.display = "none";
+                formAggiungi.style.display = "block";
+            });
+	    	
+	    })
+    	
+    })
+    
+    
 
     /*
     document.querySelectorAll(".btnEdit").forEach(bottone => {

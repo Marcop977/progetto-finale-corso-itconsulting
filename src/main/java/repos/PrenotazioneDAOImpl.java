@@ -48,9 +48,16 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	}
 
 	@Override
-	public void updatePrenotazione(Prenotazione p) {
-		// TODO Auto-generated method stub
-		
+	public void updatePrenotazione(int idpren, int stud_prenotato, int app_prenotato) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(UPDATE);
+			this.ps.setInt(1, stud_prenotato);
+			this.ps.setInt(2, app_prenotato);
+			this.ps.setInt(3, idpren);
+			this.ps.executeUpdate();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

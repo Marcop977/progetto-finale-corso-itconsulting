@@ -58,4 +58,14 @@ public class AppelloServiceImpl implements AppelloService {
 		return this.dao.isAppPresente(idCorso, data);
 	}
 
+	@Override
+	public void updateAppello(int idAppello, Date data, String materia) {
+		this.dao.updateAppello(idAppello, data, materia);
+	}
+
+//	@Override
+//	public void deleteAppelloByCorso(int corsoId) {
+//		this.dao.deleteAppelloByCorso(corsoId);
+//	}
+
 }

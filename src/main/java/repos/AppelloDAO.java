@@ -11,9 +11,10 @@ public interface AppelloDAO {
 
 	String FIND_ALL = "SELECT * FROM appello JOIN corso ON appello.materia = idcorso";
 	String ADD = "INSERT INTO appello (data, materia) VALUES (?, ?)";
-	String UPDATE = "UPDATE appello SET data = ?, materia = ?";
+	String UPDATE = "UPDATE appello SET data = ?, materia = ? WHERE idAppello = ?";
 	String DELETE_BY_ID = "DELETE FROM appello WHERE idAppello = ?";
 	String DELETE_PRENOT = "DELETE FROM prenotazione WHERE app_prenotato = ?";
+//	String DELETE_BY_CORSO = "DELETE FROM appello WHERE materia = ?";
 	String FIND_APP = "SELECT * FROM appello WHERE materia = ? AND data = ?";
 	String FIND_PRENOT = "SELECT FROM prenotazione WHERE app_prenotato = ?";
 	String FIND_CORSO_APP = "select idcorso, corso.materia, nome, cognome, idAppello, data, appello.materia from corso join professore on cattedra = idProfessore join appello on appello.materia = idcorso";
@@ -25,8 +26,9 @@ public interface AppelloDAO {
 	Appello findById(int idAppello);
 	List<Appello> findCorsiApp();
 	void addAppello(String data, int idCorso);
-	void updateAppello(Appello a);
+	void updateAppello(int idAppello, Date data, String materia);
 	void deleteAppello(int idAppello);
+//	void deleteAppelloByCorso(int corsoId);
 	boolean isPrenPresente(int idAppello);
 	boolean isAppPresente(int idCorso, Date data);
 	void closeConnection();

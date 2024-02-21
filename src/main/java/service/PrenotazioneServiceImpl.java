@@ -46,4 +46,9 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
 		return this.dao.findByAppStud(idAppello, s);
 	}
 
+	@Override
+	public void updatePrenotazione(int idpren, int stud_prenotato, int app_prenotato) {
+		this.dao.updatePrenotazione(idpren, stud_prenotato, app_prenotato);
+	}
+
 }

@@ -81,16 +81,22 @@ public class AppelloDAOImpl implements AppelloDAO {
 			this.ps.setString(1, data);
 			this.ps.setInt(2, idCorso);
 			this.ps.executeUpdate();		
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void updateAppello(Appello a) {
-		// TODO Auto-generated method stub
-
+	public void updateAppello(int idAppello, Date data, String materia) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(UPDATE);
+			this.ps.setDate(1, data);;
+			this.ps.setString(2, materia);
+			this.ps.setInt(3, idAppello);
+			this.ps.executeUpdate();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -276,5 +282,16 @@ public class AppelloDAOImpl implements AppelloDAO {
 		
 		return esiste;
 	}
+
+//	@Override
+//	public void deleteAppelloByCorso(int corsoId) {
+//		try {
+//			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_CORSO);
+//			this.ps.setInt(1, corsoId);
+//			this.ps.executeUpdate();			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

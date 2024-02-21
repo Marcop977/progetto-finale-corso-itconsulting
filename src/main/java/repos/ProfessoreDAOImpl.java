@@ -74,6 +74,30 @@ public class ProfessoreDAOImpl implements ProfessoreDAO {
 	@Override
 	public void deleteProfessoreById(int idProfessore) {
 		try {
+			
+			this.ps = conn.getConnessione().prepareStatement("SELECT idcorso FROM corso WHERE cattedra = ?");
+			this.ps.setInt(1, idProfessore);
+			this.rs = this.ps.executeQuery();
+			while (this.rs.next()) {
+				int idcorso = this.rs.getInt(1);
+				
+				this.ps = conn.getConnessione().prepareStatement("SELECT idAppello FROM appello WHERE materia = ?");
+				this.ps.setInt(1, idcorso);
+				this.rs = this.ps.executeQuery();
+				while (this.rs.next()) {
+					int idAppello = this.rs.getInt(1);
+					this.ps = conn.getConnessione().prepareStatement("DELETE FROM prenotazione WHERE app_prenotato = ?");
+					this.ps.setInt(1, idAppello);
+					this.ps.executeUpdate();
+					
+				}
+				
+				this.ps = conn.getConnessione().prepareStatement("DELETE FROM appello WHERE materia = ?");
+				this.ps.setInt(1, idcorso);
+				this.ps.executeUpdate();
+				
+			}
+			
 			this.ps = conn.getConnessione().prepareStatement(DELETE_CORSO_COLLEGATO);
 			this.ps.setInt(1, idProfessore);
 			this.ps.executeUpdate();

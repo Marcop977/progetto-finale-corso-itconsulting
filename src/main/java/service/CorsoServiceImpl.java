@@ -36,6 +36,21 @@ public class CorsoServiceImpl implements CorsoService {
 		return this.dao.isCPresente(materia);
 	}
 
+	@Override
+	public void deleteCorsoByCattedra(int cattedra) {
+		this.dao.deleteCorsoByCattedra(cattedra);
+	}
+
+	@Override
+	public void updateCorso(int idCorso, String materia, int cattedra) {
+		this.dao.updateCorso(idCorso, materia, cattedra);
+	}
+
+//	@Override
+//	public List<Corso> getbyProf(int cattedra) {
+//		return this.dao.findByProfId(cattedra);
+//	}
+
 //	@Override
 //	public Professore findByJoin(int matricola) {
 //		return this.dao.findProfJoin(matricola);

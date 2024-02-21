@@ -78,8 +78,16 @@ public class CorsoDAOImpl implements CorsoDAO {
 	}
 
 	@Override
-	public void updateCorso(Corso c) {
-
+	public void updateCorso(int idCorso, String materia, int cattedra) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(UPDATE);
+			this.ps.setString(1, materia);
+			this.ps.setInt(2, cattedra);
+			this.ps.setInt(3, idCorso);
+			this.ps.executeUpdate();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -154,30 +162,14 @@ public class CorsoDAOImpl implements CorsoDAO {
 		return esiste;
 	}
 
-
-
-
-//	@Override
-//	public Professore findProfJoin(int matricola) {
-//		Professore p = new Professore();
-//		
-//		try {
-//			this.ps1 = this.db.getConnessione().prepareStatement(FIND_PROF_JOIN);
-//			this.ps1.setInt(1, matricola);
-//			this.rs1 = ps1.executeQuery();
-//			this.rs1.next();
-//			String nome = rs1.getString("nome");
-//			String cognome = rs1.getString("cognome");
-//			p.setNome(nome);
-//			p.setCognome(cognome);
-//			System.out.println("Professore trovato: " + p.getNome() + " " + p.getCognome());
-//
-//						
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return p;
-//	}
-
+	@Override
+	public void deleteCorsoByCattedra(int cattedra) {
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(DELETE_BY_CATTEDRA);
+			this.ps.setInt(1, cattedra);
+			this.ps.executeUpdate();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

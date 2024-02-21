@@ -11,6 +11,7 @@ public interface PrenotazioneService {
 	List<Prenotazione> getPrenByAppId(int idAppello);
 	Prenotazione getPrenByAppStud(int idAppello, Studente s);
 	void addPrenotazione(int matricola, int idAppello);
+	void updatePrenotazione(int idpren, int stud_prenotato, int app_prenotato);
 	boolean isPrenExists(int matricola, int idAppello);
 	void deletePrenotazione(int idpren);
 	void close();

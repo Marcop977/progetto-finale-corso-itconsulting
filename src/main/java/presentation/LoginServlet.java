@@ -9,11 +9,14 @@ import jakarta.servlet.http.HttpSession;
 import model.Admin;
 import model.Professore;
 import model.Studente;
+import repos.Connessione;
 import service.ProfessoreServiceImpl;
 import service.StudenteService;
 import service.StudenteServiceImpl;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import service.ProfessoreService;
 
@@ -28,54 +31,57 @@ import service.AdminServiceImpl;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private Connessione connessione = new Connessione();
 
 	StudenteService service = new StudenteServiceImpl();
 	ProfessoreService service2 = new ProfessoreServiceImpl();
 	CorsoService service3 = new CorsoServiceImpl();
 	AdminService service4 = new AdminServiceImpl();
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-//		request.setAttribute("tabellaAttiva", 1);
-//		request.getRequestDispatcher("studente.jsp").forward(request, response);
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-
-		HttpSession session = request.getSession(true);
 		
-		if (username != "" || password != "") {
-			Studente s = service.getStudenteByUserPass(username, password);
-			if (s != null) {
-				request.setAttribute("tabellaAttiva", 1);
-				session.setAttribute("studente", s);
-				request.getRequestDispatcher("studente.jsp").forward(request, response);
-				return;
-			}
+		try (Connection conn = connessione.getConnessione()) {
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
 			
-			Professore p = service2.getProfByUserPass(username, password);
-			if (p != null) {
-				request.setAttribute("tabellaAttiva", 1);
-				session.setAttribute("professore", p);
-				request.getRequestDispatcher("professore.jsp").forward(request, response);
-				return;
-			}
+			HttpSession session = request.getSession(true);
 			
-			Admin a = service4.getAdminByUsern(username, password);
-			if (a != null) {
-				request.setAttribute("tabellaAttiva", 1);
-				session.setAttribute("admin", a);
-				request.getRequestDispatcher("segreteria.jsp").forward(request, response);
-				return;
+			if (username != "" || password != "") {
+				Studente s = service.getStudenteByUserPass(username, password);
+				if (s != null) {
+					request.setAttribute("tabellaAttiva", 1);
+					session.setAttribute("studente", s);
+					request.getRequestDispatcher("studente.jsp").forward(request, response);
+					return;
+				}
+				
+				Professore p = service2.getProfByUserPass(username, password);
+				if (p != null) {
+					request.setAttribute("tabellaAttiva", 1);
+					session.setAttribute("professore", p);
+					request.getRequestDispatcher("professore.jsp").forward(request, response);
+					return;
+				}
+				
+				Admin a = service4.getAdminByUsern(username, password);
+				if (a != null) {
+					request.setAttribute("tabellaAttiva", 1);
+					session.setAttribute("admin", a);
+					request.getRequestDispatcher("segreteria.jsp").forward(request, response);
+					return;
+				}
+				
+				request.setAttribute("erroreLogin", "Credenziali non valide. Si prega di riprovare.");
+				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}
-			
-			request.setAttribute("erroreLogin", "Credenziali non valide. Si prega di riprovare.");
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		
 
 
 //		boolean studenteTrovato = false;

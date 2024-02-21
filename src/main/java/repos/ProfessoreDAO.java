@@ -15,6 +15,7 @@ public interface ProfessoreDAO {
 	String DELETE_BY_ID = "DELETE FROM professore WHERE idProfessore = ?";
 	String FIND_BY_NOME_COGNOME = "SELECT idProfessore, nome, cognome FROM professore WHERE nome = ? AND cognome = ?";
 	String DELETE_CORSO_COLLEGATO = "DELETE FROM corso WHERE cattedra = ?";
+	String DELETE_APPELLO_COLLEGATO = "DELETE FROM appello WHERE materia = ?";
 	
 	List<Professore> findAll();
 	Professore findById(int idProfessore);
