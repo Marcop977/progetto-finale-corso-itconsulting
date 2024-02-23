@@ -122,9 +122,9 @@
     </div>
 
    <!-- tabella corsi -->
-   <div id="tabella1" class="bg-light pb-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
+   <div id="tabella1" class="bg-light" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
   				 <% if (corsi.isEmpty()) { %>
-   				<div class="container my-5 pb-5">
+   				<div class="container my-5 pb-4">
 			      <div class="row justify-content-center">
 			        <div class="col-md-6">
 			          <div class="card px-5 py-5 shadow">
@@ -174,8 +174,8 @@
 	        </tbody>
 	      </table>
 	    </div>
-	    <div class="container pt-5 text-end">
-	    <a href="logout">Logout</a>
+	    <div class="container py-5 text-end">
+	    <a href="logout">Logout/Torna alla home</a>
 	    </div>
 	<% } %>
 	</div>

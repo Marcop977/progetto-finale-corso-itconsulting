@@ -12,10 +12,11 @@ public interface ProfessoreDAO {
 	String FIND_BY_USERPASS = "SELECT * FROM professore WHERE username = ? AND password = ?";
 	String FIND_BY_TIPO = "SELECT * FROM professore WHERE tipo_utente = ?";
 	String UPDATE = "UPDATE professore SET username = ?, password = ?, nome = ?, cognome = ? WHERE idProfessore = ?";
-	String DELETE_BY_ID = "DELETE FROM professore WHERE idProfessore = ?";
+	String DELETE_PREN = "DELETE FROM prenotazione WHERE app_prenotato IN (SELECT idAppello FROM appello WHERE materia IN (SELECT idcorso FROM corso WHERE cattedra = ?))";
+	String DELETE_APP = "DELETE FROM appello WHERE materia IN (SELECT idcorso FROM corso WHERE cattedra = ?)";
+	String DELETE_CORSO = "DELETE FROM corso WHERE cattedra = ?";
+	String DELETE_PROF = "DELETE FROM professore WHERE idProfessore = ?";
 	String FIND_BY_NOME_COGNOME = "SELECT idProfessore, nome, cognome FROM professore WHERE nome = ? AND cognome = ?";
-	String DELETE_CORSO_COLLEGATO = "DELETE FROM corso WHERE cattedra = ?";
-	String DELETE_APPELLO_COLLEGATO = "DELETE FROM appello WHERE materia = ?";
 	
 	List<Professore> findAll();
 	Professore findById(int idProfessore);
