@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const alertAggiunto = document.querySelector(".alertAggiunto");
 const appelloData = Array.from(document.querySelectorAll(".appelloData"));
 const addAppello = Array.from(document.querySelectorAll(".addAppello"));
 
