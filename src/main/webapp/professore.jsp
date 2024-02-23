@@ -129,7 +129,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 					<form action="appello" method="post">
 						<input type="date" name="dataAppello" class="appelloData" style="margin-right: 10px; border: none; border-bottom: 1px solid grey; border-radius: 2px">
 						<input type="hidden" name="idCorso" value="<%=c.getIdCorso() %>" class="btn btn-primary">
-						<button type="submit" name="add" class="btn btn-success addAppello"><i class="bi bi-plus-lg"></i></button>
+						<button type="submit" name="add" class="btn btn-primary addAppello"><i class="bi bi-plus-lg"></i></button>
 						<button type="submit" name="view" class="btn btn-outline-primary">Visualizza appelli</button>
 					</form>
 				</td>
@@ -147,7 +147,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 			                style="font-size: 400%"
 			              ></i>
 			              <h2 class="mb-3">
-			                Non ci sono corso disponibili.
+			                Non ci sono corsi disponibili.
 			              </h2>	              
 			              <a href="logout">Effettua logout/Torna alla home</a>
 			            </div>
@@ -215,7 +215,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 				              ></i>
 				              <h2 class="mb-3">
 				                Non ci sono appelli disponibili.
-				              <a href="javascript:void(0);" class="btnBack">Seleziona un nuovo appello</a><br>
+				              <a href="javascript:void(0);" class="btnBack">Seleziona un altro corso</a><br>
 				              </h2>
 				              <p>oppure</p>			              
 				              <a href="logout">Effettua logout</a>
@@ -277,8 +277,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 	                style="font-size: 400%"
 	              ></i>
 	              <h2 class="mb-3">
-	                Non ci sono prenotazioni disponibili.<br>
-	               <a href="javascript:void(0);" class="btnBack">Seleziona una nuova prenotazione</a><br>
+	                Non sono state effettuate prenotazioni.<br>
+	               <a href="javascript:void(0);" class="btnBack">Seleziona uno nuovo appello</a><br>
 	              </h2>
 			       <p>oppure</p>			              
 			       <a href="logout">Effettua logout/Torna alla home</a>
@@ -390,6 +390,8 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
     </footer>
     <script src="./js/professore.js"></script>
 	 <script>
+	 const alertAggiunto = document.querySelector(".alertAggiunto");
+	 
 	 <% if (appelloAggiunto != null) { %>
 		 	alertAggiunto.style.display = "block";
 		 	const alertTitolo = document.createElement("h2");
