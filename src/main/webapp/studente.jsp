@@ -2,10 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*"%>
-<%@ page import="presentation.AddStudenteCtrl" %>
-<%@ page import="presentation.CorsoCtrl" %>
 <%@ page import="model.Corso" %>
 <%@page import="presentation.AppelloCtrl" %>
+<%@ page import="presentation.ShowRecordCtrl"%>
 <%@page import="model.Studente" %>
 <%@ page import="presentation.PrenotazioneCtrl" %>
 <%@ page import="model.Prenotazione" %>
@@ -15,6 +14,9 @@
 <%@page import="java.time.LocalTime" %>
 <%@page import="java.text.SimpleDateFormat" %>
 <%@page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="presentation.AddRecordCtrl"%>
+<%@ page import="java.util.Collections" %>
+<%@ page import="java.util.Comparator" %>
 
 
 <!DOCTYPE html>
@@ -25,10 +27,8 @@
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
@@ -38,11 +38,12 @@
   </head>
   <body class="bg-light">
   
-  <% AddStudenteCtrl studCtrl = new AddStudenteCtrl();
-  CorsoCtrl corsoCtrl = new CorsoCtrl();
+  <%
+  ShowRecordCtrl showCtrl = new ShowRecordCtrl();
+  List<Corso> corsi = showCtrl.mostraCorsi();
   Studente s = (Studente) session.getAttribute("studente");
-  System.out.println("Studente: " + s);
-  AppelloCtrl controller = new AppelloCtrl();
+  List<Appello> appelli = (List<Appello>) request.getAttribute("appelli");
+  
   //se la prenotazione esiste
   String prenExists = (String) request.getAttribute("errore");
   Integer tabellaAttiva = (Integer) request.getAttribute("tabellaAttiva");
@@ -55,6 +56,17 @@
   } else {
       tabellaNome = "Corsi";
   } %>
+  
+ <%
+ Collections.sort(corsi, new Comparator<Corso>() {
+   @Override
+   public int compare(Corso c1, Corso c2) {
+	   return c1.getMateria().compareTo(c2.getMateria());
+   }
+ });
+ %>
+  
+ 
   
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-scroll pb-4 pt-5">
@@ -111,7 +123,7 @@
 
    <!-- tabella corsi -->
    <div id="tabella1" class="bg-light pb-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
-  				 <% if (corsoCtrl.mostraCorsi().isEmpty()) { %>
+  				 <% if (corsi.isEmpty()) { %>
    				<div class="container my-5 pb-5">
 			      <div class="row justify-content-center">
 			        <div class="col-md-6">
@@ -133,8 +145,8 @@
 			      </div>
 			    </div>
 			    <% } else { %>
-	    <div class="container"><h2 class="m-0 ps-2"> Tabella corsi</h2></div>
-	    <div class="container mt-4 mb-5">
+	    <div class="container"><h2 class="m-0 ps-2">I corsi:</h2></div>
+	    <div class="container mt-3 mb-5">
 	      <table class="table shadow">
 	        <thead>
 	          <tr>
@@ -145,7 +157,7 @@
 	          </tr>
 	        </thead>
 	        <tbody>
-	          <% for (Corso c : corsoCtrl.mostraCorsi()) { 
+	          <% for (Corso c : corsi) { 
 	          %>
 	          <tr>
 	            <th scope="row" class="p-4"><%= c.getIdCorso() %></th>
@@ -172,16 +184,23 @@
 		  
 		  <% SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); %>
 		<!-- appelli disponibili -->
-		<% List<Appello> appelli = (List<Appello>) request.getAttribute("appelli"); %>
 		<div id="tabella2" class="bg-light pb-5" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
 		<% if (appelli != null && !appelli.isEmpty()) { %>
+				<%
+				Collections.sort(appelli, new Comparator<Appello>() {
+					   @Override
+					   public int compare(Appello a1, Appello a2) {							        	
+					       return a1.getData().compareTo(a2.getData());
+					   }
+				});
+				%>
 				<% for (Appello a : appelli) { %>
 				<div class="container">
 		      <h2 class="m-0 ps-2">
-		        Per il corso di <span class="text-decoration-underline"><%= a.getCorsoId().getMateria()%></span> sono disponibili i seguenti appelli:
+		        Appelli disponibili per il corso di <strong class="text-decoration-underline"><%= a.getCorsoId().getMateria()%></strong>:
 		      </h2>
 		      </div>
-		    <div class="container mt-4 mb-5">
+		    <div class="container mt-3 mb-5">
 		      <table class="table shadow">
 		        <thead>
 		          <tr>
@@ -409,16 +428,6 @@
         </div>
       </div>
     </footer>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let btnsBack = document.querySelectorAll(".btnBack");
-        btnsBack.forEach(function(btnBack) {
-            btnBack.addEventListener("click", function() {
-                console.log("ciao");
-                window.history.back();
-            });
-        });
-    });
-    </script>
+    <script src="./js/studente.js"></script>
 </body>
 </html>

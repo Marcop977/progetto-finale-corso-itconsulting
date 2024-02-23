@@ -83,4 +83,6 @@ a i {
     caret-color: white;
 }
 
-
+.bordo-rosso {
+	border-color: red;
+}

@@ -3,7 +3,6 @@ package service;
 import java.util.List;
 
 import model.Corso;
-import model.Professore;
 import repos.CorsoDAO;
 import repos.CorsoDAOImpl;
 
@@ -46,14 +45,9 @@ public class CorsoServiceImpl implements CorsoService {
 		this.dao.updateCorso(idCorso, materia, cattedra);
 	}
 
-//	@Override
-//	public List<Corso> getbyProf(int cattedra) {
-//		return this.dao.findByProfId(cattedra);
-//	}
-
-//	@Override
-//	public Professore findByJoin(int matricola) {
-//		return this.dao.findProfJoin(matricola);
-//	}
+	@Override
+	public List<Corso> getByProf(int cattedra) {
+		return this.dao.findByProfId(cattedra);
+	}
 
 }

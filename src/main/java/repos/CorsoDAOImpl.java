@@ -1,6 +1,5 @@
 package repos;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +7,6 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Appello;
 import model.Corso;
 import model.Professore;
 
@@ -171,5 +169,53 @@ public class CorsoDAOImpl implements CorsoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<Corso> findByProfId(int idProfessore) {
+		List<Corso> corsi = new ArrayList<>();
+		try {
+			this.ps = this.db.getConnessione().prepareStatement(FIND_BY_PROF);
+			this.ps.setInt(1, idProfessore);
+			this.rs = this.ps.executeQuery();
+			while (this.rs.next()) {
+				int idcorso = this.rs.getInt(1);
+				String nomeMateria = this.rs.getString(2);
+				
+				Professore p = new Professore();
+				p.setIdProfessore(idProfessore);
+				
+				Corso c = new Corso();
+				c.setIdCorso(idcorso);
+				c.setMateria(nomeMateria);
+				c.setProfessore(p);
+				
+				corsi.add(c);
+				
+//				this.ps = this.db.getConnessione().prepareStatement(FIND_PROF_BY_CORSO);
+//				this.ps.setInt(1, cattedra);
+//				this.rs = this.ps.executeQuery();
+//				if (this.rs.next()) {
+//					String nome = this.rs.getString(5);
+//					String cognome = this.rs.getString(6);
+//					Professore p = new Professore();
+//					p.setNome(nome);
+//					p.setCognome(cognome);
+//					
+//					Corso c = new Corso();
+//					c.setIdCorso(idcorso);
+//					c.setMateria(nomeMateria);
+//					c.setProfessore(p);
+//					
+//					corsi.add(c);
+//				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return corsi;
 	}
 }

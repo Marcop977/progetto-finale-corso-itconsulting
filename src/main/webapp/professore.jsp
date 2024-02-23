@@ -4,7 +4,7 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 <%@page import="model.Corso" %>
 <%@page import="model.Appello" %>
 <%@page import="presentation.AppelloCtrl" %>
-<%@page import="presentation.CorsoCtrl" %>
+<%@ page import="presentation.ShowRecordCtrl"%>
 <%@page import="model.Prenotazione"%>
 <%@page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
@@ -19,27 +19,30 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
     />
     <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
     <title>Document</title>
   </head>
   <body class="bg-light">
     <% Professore p = (Professore) session.getAttribute("professore");
-    CorsoCtrl corsoController = new CorsoCtrl();
+    ShowRecordCtrl showController = new ShowRecordCtrl();
     AppelloCtrl appelloController = new AppelloCtrl();
     int tabellaAttiva = (Integer) request.getAttribute("tabellaAttiva");
-    System.out.println(tabellaAttiva);
+    List<Appello> appelli = (List<Appello>) request.getAttribute("appelli");
+    List<Prenotazione> prenotazioni = (List<Prenotazione>) request.getAttribute("prenotazioni");
+    String appelloAggiunto = (String) request.getAttribute("appelloAggiunto");
     String tabellaNome = "";
     
-    if (tabellaAttiva != 1)
+    if (tabellaAttiva == 1)
+    	tabellaNome = "Corsi";
+    else if (tabellaAttiva == 2)
+    	tabellaNome = "Appelli";
+    else if (tabellaAttiva == 3)
     	tabellaNome = "Prenotazioni";
-    else
-    	tabellaNome = "Corsi";	
+    	
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     %>
 
@@ -95,13 +98,47 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
         <h1 class="text-light">Area personale - Docente - <%=tabellaNome %></h1>
       </div>
     </div>
+    
 
-    <!-- tabella corsi -->
+	<!-- tabella corsi -->	
 	<div class="container my-5" <% if (tabellaAttiva != 1) out.print("style=\"display:none;\""); %>>
-
-		<% if (appelloController.mostraAppelliByProf(p).isEmpty()) { %>
-		<div class="container my-5 pb-5">
-			      <div class="row justify-content-center">
+		<% if (p != null && !showController.mostraCorsiByProf(p.getIdProfessore()).isEmpty()) { %>
+		<div class="container mt-4">
+			<h3 class="mb-3">I suoi corsi:</h3>
+		</div>
+		<table class="table shadow">
+			<tr>
+				<th scope="col" class="th-corsi bg-primary text-light">ID corso</th>
+				<td scope="col" class="th-corsi bg-primary text-light">Materia</td>
+				<td scope="col" class="th-corsi bg-primary text-light">Appello</td>
+			</tr>
+			<% if (p != null) { %>
+			<%
+			Collections.sort(showController.mostraCorsiByProf(p.getIdProfessore()), new Comparator<Corso>() {
+				   @Override
+				   public int compare(Corso c1, Corso c2) {
+					   return c1.getMateria().compareTo(c2.getMateria());
+				   }
+			   });
+			%>
+			<% for (Corso c : showController.mostraCorsiByProf(p.getIdProfessore())) { %>
+			<tr>
+				<td scope="row" class="p-4"><%=c.getIdCorso() %></td>
+				<td><%=c.getMateria() %></td>
+				<td>
+					<form action="appello" method="post">
+						<input type="date" name="dataAppello" class="appelloData" style="margin-right: 10px; border: none; border-bottom: 1px solid grey; border-radius: 2px">
+						<input type="hidden" name="idCorso" value="<%=c.getIdCorso() %>" class="btn btn-primary">
+						<button type="submit" name="add" class="btn btn-success addAppello"><i class="bi bi-plus-lg"></i></button>
+						<button type="submit" name="view" class="btn btn-outline-primary">Visualizza appelli</button>
+					</form>
+				</td>
+			</tr>
+			<% } } %>
+		</table>
+		<% } else { %>
+			<div class="container my-5 pb-5">
+			    <div class="row justify-content-center">
 			        <div class="col-md-6">
 			          <div class="card px-5 py-5 shadow">
 			            <div class="text-center">
@@ -110,137 +147,157 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
 			                style="font-size: 400%"
 			              ></i>
 			              <h2 class="mb-3">
-			                Per la sua materia/e non ci sono appelli disponibili.
-			              </h2>
-			                <a href="logout">Effettua logout</a>
+			                Non ci sono corso disponibili.
+			              </h2>	              
+			              <a href="logout">Effettua logout/Torna alla home</a>
 			            </div>
 			          </div>
 			        </div>
 			      </div>
-			    </div>
- 		<%}else {%>
-	    <div class="container mt-4">
-		    <h3 class="mb-3">
-		        Per la sua materia/e sono disponibili i seguenti appelli:
-		    </h3>
-	      <table class="table shadow">
-	        <thead>
-	          <tr>
-	            <th scope="col" class="th-corsi bg-primary text-light">ID Appello</th>
-	            <th scope="col" class="th-corsi bg-primary text-light">Data</th>
-	            <th scope="col" class="th-corsi bg-primary text-light">Materia</th>
-	            <th scope="col" class="th-corsi bg-primary text-light"></th>
-	          </tr>
-	        </thead>
-	        <tbody>
-	        <% for (Appello a : appelloController.mostraAppelliByProf(p)) { %>
-        <% if (a != null) { %>
-	          <tr>
-	            <th scope="row"><%= a.getIdAppello() %></th>
-                <td><%= sdf.format(a.getData()) %></td>
-                <td><%= a.getCorsoId().getMateria() %></td>
-                <td>
-	            	<form action="prenotazioni" method="post">
-	                	<input type="hidden" name="ID_appello" value="<%=a.getIdAppello() %>">
-	                	<button class="btn btn-outline-primary" type="submit"><i class="bi bi-eye"></i></button>
-                	</form>
-                </td>
-	          </tr>
-		<% } }%>
-	        </tbody>
-	      </table>
-	    </div>
-	    
-	    <div class="container pt-5 mt-5 text-end">
-	    <a href="logout">Logout</a>
-	    </div>
-		</div>
+			</div>
+			<% } %>
+			<div class="container text-end pt-5 mt-5">
+		      <a href="logout">Logout/Torna alla home</a>
+		    </div>
+	</div>
+	
+	<div class="alert alert-success alertAggiunto fixed-bottom w-50 text-center ms-auto" style="display: none"></div>
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-		
+	<!-- tabella appelli -->
 	<div class="container my-5" <% if (tabellaAttiva != 2) out.print("style=\"display:none;\""); %>>
-		<% List<Prenotazione> prenotazioni = (List<Prenotazione>) request.getAttribute("prenotazioni"); %>
-		<% if (prenotazioni != null && !prenotazioni.isEmpty()) { %>
-        <% for (Prenotazione p1 : prenotazioni) { %>
-        <div class="container mt-4">
-		    <h3 class="mb-3">Per il corso di
-		        <span class="text-decoration-underline"><%= p1.getAppPrenotato().getCorsoId().getMateria() %></span> in
-		        data <%=p1.getAppPrenotato().getData() %> si sono prenotati i seguenti studenti:
-	      	</h3>
-	      	<% break; } %>
-		    <table class="table shadow">
-		        <thead>
-		            <tr>
-		                <th scope="col" class="th-corsi bg-primary text-light">Matricola</th>
-		                <th scope="col" class="th-corsi bg-primary text-light">Nome</th>
-		                <th scope="col" class="th-corsi bg-primary text-light">Cognome</th>
-		            </tr>
-	        </thead>
-	        <tbody>
-	        <% List<Prenotazione> prenotazioni2 = (List<Prenotazione>) request.getAttribute("prenotazioni");%>
-	        
-	        <% Collections.sort(prenotazioni2, new Comparator<Prenotazione>() {
-	            	@Override
-		            public int compare(Prenotazione p2, Prenotazione p3) {
-		            	String matricola1 = Integer.toString(p2.getStudPrenotato().getMatricola());
-		                String matricola2 = Integer.toString(p3.getStudPrenotato().getMatricola());
-		                return matricola1.compareTo(matricola2);
-		            }
-	       		}); %>
-	      
-				<% for (Prenotazione p4 : prenotazioni) { %>
-	            <tr>
-	                <th scope="row"><%= p4.getStudPrenotato().getMatricola()  %></th>
-	                <td><%= p4.getStudPrenotato().getNome()%></td>
-	                <td><%= p4.getStudPrenotato().getCognome() %></td>
-	            </tr>
-	            <% } %>
-	        </tbody>
-	    	</table>
-    	</div>
-	    <div class="container pt-5 mt-5 d-flex justify-content-between">
-		    <a href="javascript:void(0);" class="btnBack">Torna indietro</a>
-		    <a href="logout">Logout/Torna alla home</a>
+	<% if (appelli != null && !appelli.isEmpty()) { %>
+		<div class="container mt-4 mb-3">
+			<h3>Appelli per il corso di <strong class="text-decoration-underline"><%=appelli.get(0).getCorsoId().getMateria() %></strong>:</h3>
 		</div>
+		<table class="table shadow">
+			<tr>
+				<th scope="col" class="th-corsi bg-primary text-light">ID appello</th>
+				<td scope="col" class="th-corsi bg-primary text-light">Data</td>
+				<td scope="col" class="th-corsi bg-primary text-light">Prenotazioni</td>
+			</tr>
+			<% Collections.sort(appelli, new Comparator<Appello>() {
+			    @Override
+			    public int compare(Appello a1, Appello a2) {
+			    	Date dataAppello1 = a1.getData();
+			    	Date dataAppello2 = a2.getData();
+			    	
+			        return dataAppello1.compareTo(dataAppello2);
+			    }
+				});
+			%>
+			<% for (Appello a : appelli) { %>
+			<tr>
+				<td scope="row" class="p-4"><%=a.getIdAppello() %></td>
+				<td><%=sdf.format(a.getData()) %></td>
+				<td>
+					<form action="prenotazioni" method="post">
+						<input type="hidden" value="<%=a.getIdAppello() %>" name="ID_appello">
+						<input type="submit" value="Visualizza prenotazioni" class="btn btn-outline-primary">
+					</form>
+				</td>
+			</tr>
+			<% } %>
+		</table>
+		<div class="container d-flex justify-content-between pt-5 mt-5">
+		      <a href="javascript:void(0);" class="btnBack mb-5">Visualizza i corsi</a>
+		      <a href="logout">Logout/Torna alla home</a>
+		    </div>
 		<% } else { %>
-			   <div class="container my-5 pb-5">
-			      <div class="row justify-content-center">
-			        <div class="col-md-6">
-			          <div class="card px-5 py-5 shadow">
-			            <div class="text-center">
-			              <i
-			                class="bi bi-chat-dots text-muted"
-			                style="font-size: 400%"
-			              ></i>
-			              <h2>
-			                Non sono stata effettuate prenotazioni per questo appello.<br />
-			                <a href="javascript:void(0);" class="btnBack">Seleziona un nuovo appello</a>
-			              </h2>
-			              <p>oppure</p>
-			            </div>
-			            <div class="text-center"><a href="logout">Logout/Torna alla home</a></div>
-			            </div>
-			          </div>
-			        </div>
-			      </div>
-			    <% }} %>
+			<div class="container my-5 pb-5">
+				    <div class="row justify-content-center">
+				        <div class="col-md-6">
+				          <div class="card px-5 py-5 shadow">
+				            <div class="text-center">
+				              <i
+				                class="bi bi-file-earmark text-muted"
+				                style="font-size: 400%"
+				              ></i>
+				              <h2 class="mb-3">
+				                Non ci sono appelli disponibili.
+				              <a href="javascript:void(0);" class="btnBack">Seleziona un nuovo appello</a><br>
+				              </h2>
+				              <p>oppure</p>			              
+				              <a href="logout">Effettua logout</a>
+				            </div>
+				          </div>
+				        </div>
+				 </div>
+			</div>
+		<% } %>
+	</div>
+	
+	
+	
+	
+	<!-- tabella prenotazioni -->
+	<div class="container my-5" <% if (tabellaAttiva != 3) out.print("style=\"display:none;\""); %>>
+	<% if (prenotazioni != null && !prenotazioni.isEmpty()) { %> <!-- prenotazioni.get(0) perché mi restituisce 1 record essendo la prenotazione unica -->
+		<div class="container mt-4 mb-3">
+			<h3>Prenotazioni per l'appello di <strong class="text-decoration-underline"><%=prenotazioni.get(0).getAppPrenotato().getCorsoId().getMateria() %></strong> in data <strong><%=sdf.format(prenotazioni.get(0).getAppPrenotato().getData()) %></strong>:</h3>
+		</div>
+		<table class="table shadow">
+			<tr>
+				<th scope="col" class="th-corsi bg-primary text-light">ID prenotazione</th>
+				<td scope="col" class="th-corsi bg-primary text-light">Studente</td>
+				<td scope="col" class="th-corsi bg-primary text-light">Data</td>
+				<td scope="col" class="th-corsi bg-primary text-light">Materia</td>
+			</tr>
+			<% Collections.sort(prenotazioni, new Comparator<Prenotazione>() {
+			    @Override
+			    public int compare(Prenotazione p1, Prenotazione p2) {
+			    	String nomePren1 = p1.getStudPrenotato().getNome();
+			    	String nomePren2 = p2.getStudPrenotato().getNome();
+			    	
+			        return nomePren1.compareTo(nomePren2);
+			    }
+				});
+			%>
+			<% for (Prenotazione p1 : prenotazioni) { %>
+			<tr>
+				<td scope="row" class="p-4"><%=p1.getIdPrenotazione() %></td>
+				<td><%=p1.getStudPrenotato().getNome() + " " + p1.getStudPrenotato().getCognome() %></td>
+				<td><%=sdf.format(p1.getAppPrenotato().getData()) %></td>
+				<td><%=p1.getAppPrenotato().getCorsoId().getMateria() %></td>
+			</tr>
+			<% } %>
+		</table>
+			<div class="container d-flex justify-content-between pt-5 mt-5">
+		      <a href="javascript:void(0);" class="btnBack mb-5">Visualizza appelli</a>
+		      <a href="logout">Logout/Torna alla home</a>
+		    </div>
+	<% } else { %>
+	<div class="container my-5 pb-5">
+	    <div class="row justify-content-center">
+	        <div class="col-md-6">
+	          <div class="card px-5 py-5 shadow">
+	            <div class="text-center">
+	              <i
+	                class="bi bi-file-earmark text-muted"
+	                style="font-size: 400%"
+	              ></i>
+	              <h2 class="mb-3">
+	                Non ci sono prenotazioni disponibili.<br>
+	               <a href="javascript:void(0);" class="btnBack">Seleziona una nuova prenotazione</a><br>
+	              </h2>
+			       <p>oppure</p>			              
+			       <a href="logout">Effettua logout/Torna alla home</a>
+	            </div>
+	          </div>
+	        </div>
+	 	</div>
+	</div>
+	<% } %>
 	</div>
 
 
 
 
- <!-- Footer -->
+
+
+
+
+ 	<!-- Footer -->
     <footer class="text-start text-light" style="background-color: #002046">
       <div class="container p-5">
         <div class="row p-5">
@@ -331,16 +388,20 @@ pageEncoding="ISO-8859-1"%> <%@ page import="java.sql.*"%>
         </div>
       </div>
     </footer>
+    <script src="./js/professore.js"></script>
 	 <script>
-	 document.addEventListener("DOMContentLoaded", function() {
-	        let btnsBack = document.querySelectorAll(".btnBack");
-	        btnsBack.forEach(function(btnBack) {
-	            btnBack.addEventListener("click", function() {
-	                console.log("ciao");
-	                window.history.back();
-	            });
-	        });
-	  });
+	 <% if (appelloAggiunto != null) { %>
+		 	alertAggiunto.style.display = "block";
+		 	const alertTitolo = document.createElement("h2");
+	        alertTitolo.textContent = "<%=appelloAggiunto %>";
+	        alertAggiunto.appendChild(alertTitolo);
+		 	<% if (appelloAggiunto.equals("C'è stato un errore. Appello già esistente")) { %>
+		 		alertAggiunto.setAttribute("class", "alert alert-danger alertAggiunto fixed-bottom w-50 text-center ms-auto");
+		 	<% } %>
+		 	setTimeout(() => {
+		 		alertAggiunto.style.display = "none";
+		 	}, 3000);
+	 <% } %>
     </script>    
   </body>
 </html>

@@ -73,7 +73,6 @@ public class UpdateRecordCtrl extends HttpServlet {
 		
 		HttpSession session;
 		if (username != "" && username != null && password != "" && password != null && nome != "" && nome != null && cognome != "" && cognome != null && tipoStringa != null && service.isStudente(tipo)) {
-			System.out.println("è studente");
 			session = request.getSession(true);
 			session.setAttribute("tabellaAttiva", "studente");
 			service.updateStudente(Integer.parseInt(idUtente), nome, cognome, username, password);
@@ -82,7 +81,6 @@ public class UpdateRecordCtrl extends HttpServlet {
 		}
 		
 		if (username != "" && username != null && password != "" && password != null && nome != "" && nome != null && cognome != "" && cognome != null && service1.isProfessore(tipo)) {
-			System.out.println("è professore");
 			session = request.getSession(true);
 			session.setAttribute("tabellaAttiva", "professore");
 			service1.updateProfessore(Integer.parseInt(idUtente), username, password, nome, cognome);
@@ -110,7 +108,6 @@ public class UpdateRecordCtrl extends HttpServlet {
 			session = request.getSession(true);
 			session.setAttribute("tabellaAttiva", "prenotazione");
 			service4.updatePrenotazione(Integer.parseInt(idPrenotazione), Integer.parseInt(matricolaPren), Integer.parseInt(idAppelloPren));
-			System.out.println("trovato");
 			request.getRequestDispatcher("segreteria.jsp").forward(request, response);		
 			return;			
 		}

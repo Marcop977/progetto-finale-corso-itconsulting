@@ -159,4 +159,24 @@
     <servlet-name>EditStudenteCtrl</servlet-name>
     <url-pattern>/EditStudenteCtrl</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddRecordCtrl</display-name>
+    <servlet-name>AddRecordCtrl</servlet-name>
+    <servlet-class>presentation.AddRecordCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddRecordCtrl</servlet-name>
+    <url-pattern>/AddRecordCtrl</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteRecordCtrl</display-name>
+    <servlet-name>DeleteRecordCtrl</servlet-name>
+    <servlet-class>presentation.DeleteRecordCtrl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteRecordCtrl</servlet-name>
+    <url-pattern>/DeleteRecordCtrl</url-pattern>
+  </servlet-mapping>
 </web-app>

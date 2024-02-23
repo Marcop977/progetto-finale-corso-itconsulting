@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class Connessione {
 	
-	private final String HOST = "jdbc:mysql://localhost:3306/universita2";
-	private final String USER = "root";
-	private final String PASS = "Residentevil.97";
+	private final String HOST = "jdbc:mysql://localhost:3306/universita";
+	private final String USER = "";
+	private final String PASS = "";
 	
 	private Connection conn;
 	

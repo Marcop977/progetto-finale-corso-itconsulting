@@ -3,7 +3,6 @@ package service;
 import java.util.List;
 
 import model.Professore;
-import model.Studente;
 
 public interface ProfessoreService {
 	

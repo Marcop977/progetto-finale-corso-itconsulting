@@ -11,8 +11,6 @@ import model.Appello;
 import model.Corso;
 import model.Professore;
 
-import model.Corso;
-
 public class AppelloDAOImpl implements AppelloDAO {
 	
 	Connessione db = new Connessione();
@@ -35,11 +33,9 @@ public class AppelloDAOImpl implements AppelloDAO {
 				int idAppello = rs.getInt("idAppello");
 				Date data = rs.getDate("data");
 				int corsoId = rs.getInt("appello.materia");
-				int idCorso = rs.getInt("idcorso");
 				String nomeMateria = rs.getString("corso.materia");
 				String nomeProf = rs.getString("nome");
 				String cognomeProf = rs.getString("cognome");
-				int cattedra = rs.getInt("appello.materia");
 				
 				Professore p = new Professore();
 				p.setNome(nomeProf);
@@ -80,7 +76,7 @@ public class AppelloDAOImpl implements AppelloDAO {
 			this.ps = this.db.getConnessione().prepareStatement(ADD);
 			this.ps.setString(1, data);
 			this.ps.setInt(2, idCorso);
-			this.ps.executeUpdate();		
+			this.ps.executeUpdate();	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -130,25 +126,19 @@ public class AppelloDAOImpl implements AppelloDAO {
 			this.rs1 = ps1.executeQuery();
 			
 			while (rs1.next()) {
-				int idCorsoDB = rs1.getInt(2);
-				String nomeMateria = rs1.getString(1);
-				int idProfessore = rs1.getInt(5);
-				String nomeProf = rs1.getString(3);
-				String cognomeProf = rs1.getString(4);
-				String username = rs1.getString(6);
-				String password = rs1.getString(7);
-				Date data = rs1.getDate(8);
-				int idAppelloDB = rs1.getInt(9);
+				int idAppelloDB = rs1.getInt(1);
+				Date data = rs1.getDate(2);
+				int materia = rs1.getInt(3);
+				String nomeMateria = rs1.getString(5);
+				String nomeProf = rs1.getString("nome");
+				String cognomeProf = rs1.getString("cognome");
 				
 				Professore p = new Professore();
-				p.setIdProfessore(idProfessore);
 				p.setNome(nomeProf);
 				p.setCognome(cognomeProf);
-				p.setUsername(username);
-				p.setPassword(password);
 				
 				Corso c = new Corso();
-				c.setIdCorso(idCorsoDB);
+				c.setIdCorso(materia);
 				c.setMateria(nomeMateria);
 				c.setProfessore(p);
 				
@@ -156,6 +146,7 @@ public class AppelloDAOImpl implements AppelloDAO {
 				a.setIdAppello(idAppelloDB);
 				a.setCorsoId(c);
 				a.setData(data);
+				
 				
 				appelli.add(a);
 				
@@ -173,7 +164,6 @@ public class AppelloDAOImpl implements AppelloDAO {
 		
 		try {
 			this.ps = db.getConnessione().prepareStatement(FIND_BY_PROF);
-			System.out.println(p);
 			this.ps.setInt(1, p.getIdProfessore());
 			this.rs = this.ps.executeQuery();
 			
@@ -194,7 +184,6 @@ public class AppelloDAOImpl implements AppelloDAO {
 				a.setIdAppello(idAppello);
 				
 				appelli.add(a);
-				System.out.println("Appello: " + a);
 			}
 			
 			

@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.Prenotazione;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import service.PrenotazioneService;
@@ -22,13 +21,11 @@ public class PrenAppelloCtrl extends HttpServlet {
 	PrenotazioneService service = new PrenotazioneServiceImpl();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("ciao");
 		String idAppello = request.getParameter("ID_appello");
-		System.out.println("Appello: " + idAppello);
 		if (idAppello != null) {
 			List<Prenotazione> prenotazioni = service.getPrenByAppId(Integer.parseInt(idAppello));
 			request.setAttribute("prenotazioni", prenotazioni);
-			request.setAttribute("tabellaAttiva", 2);
+			request.setAttribute("tabellaAttiva", 3);
 		}
 		request.getRequestDispatcher("professore.jsp").forward(request, response);
 	}

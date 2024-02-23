@@ -10,8 +10,6 @@
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
     />
     <link
       rel="stylesheet"
@@ -325,7 +323,9 @@
           <div class="col-lg-2">
             <h5>Pages</h5>
             <ul class="p-0" style="line-height: 2">
-              <small><a href="">Home</a></small>
+              <li>
+              	<small><a href="">Home</a></small>
+              </li>
               <li>
                 <small><a href="">Opening Hours</a></small>
               </li>
@@ -379,35 +379,8 @@
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="./js/script.js"></script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			document.getElementById("btnArea").addEventListener("click",
-					function() {
-	<%if (session.getAttribute("studente") != null) {%>
-		
-	<%request.setAttribute("tabellaAttiva", 1);%>
-		location.href = "studente.jsp";
-	<%} else if (session.getAttribute("professore") != null) {%>
-		location.href = "professore.jsp";
-	<%}%>
-		});
-
-			document.getElementById("btnLogout").addEventListener("click",
-					function() {
-	<%session.removeAttribute("studente");%>
-		
-	<%session.removeAttribute("professore");%>
-		});
-		})
-		
-		setTimeout(() => {
-			document.querySelector(".alert").style.display = "none";
-		}, 5000);
-	</script>
+    <script src="./js/index.js"></script>
 </body>
 </html>

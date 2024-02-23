@@ -81,35 +81,39 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 			this.rs = this.ps.executeQuery();
 			
 			while (rs.next()) {
-				int matricola = rs.getInt(1);
-				String nome = rs.getString(2);
-				String cognome = rs.getString(3);
-				int idAppello2 = rs.getInt(4);
-				Date data = rs.getDate(5);
-				int corsoId = rs.getInt(6);
-				int idCorso = rs.getInt(7);
-				String nomeMateria = rs.getString(8);
-				int cattedra = rs.getInt(9);
+				int idPren = rs.getInt("idpren");
+				int matricola = rs.getInt("matricola");
+				String nomeStud = rs.getString("studente.nome");
+				String cognomeStud = rs.getString("studente.cognome");
+				Date data = rs.getDate("data");
+				String nomeMateria = rs.getString("corso.materia");
+				String nomeProf = rs.getString("professore.nome");
+				String cognomeProf = rs.getString("professore.cognome");
 				
 				Studente s = new Studente();
 				s.setMatricola(matricola);
-				s.setNome(nome);
-				s.setCognome(cognome);
+				s.setNome(nomeStud);
+				s.setCognome(cognomeStud);
+				
+				Professore p = new Professore();
+				p.setNome(nomeProf);
+				p.setCognome(cognomeProf);
 				
 				Corso c = new Corso();
-				c.setIdCorso(idCorso);
 				c.setMateria(nomeMateria);
+				c.setProfessore(p);
 				
 				Appello a = new Appello();
-				a.setIdAppello(idAppello2);
+				a.setIdAppello(idAppello);
 				a.setData(data);
 				a.setCorsoId(c);
 				
-				Prenotazione p = new Prenotazione();
-				p.setStudPrenotato(s);
-				p.setAppPrenotato(a);
+				Prenotazione p1 = new Prenotazione();
+				p1.setIdPrenotazione(idPren);
+				p1.setStudPrenotato(s);
+				p1.setAppPrenotato(a);
 				
-				prenotazioni.add(p);
+				prenotazioni.add(p1);
 			}
 			
 		} catch (SQLException e) {
@@ -176,10 +180,8 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 	            String cognome = rs1.getString(3);
 	            int idAppello2 = rs1.getInt(4);
 	            Date data = rs1.getDate(5);
-	            int corsoId = rs1.getInt(6);
 	            int idCorso = rs1.getInt(7);
 	            String nomeMateria = rs1.getString(8);
-	            int cattedra = rs1.getInt(9);
 	            int idPren = rs1.getInt(10);
 	            
 	            Studente s = new Studente();
@@ -231,8 +233,6 @@ public class PrenotazioneDAOImpl implements PrenotazioneDAO{
 			this.rs = this.ps.executeQuery();
 			while (this.rs.next()) {
 				int idPren = this.rs.getInt("idpren");
-				int studPren = this.rs.getInt("stud_prenotato");
-				int appPren = this.rs.getInt("app_prenotato");
 				int matricola = this.rs.getInt("matricola");
 				String nomeStud = this.rs.getString(8);
 				String cognomeStud = this.rs.getString(9);

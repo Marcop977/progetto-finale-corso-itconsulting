@@ -7,12 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Appello;
 import model.Prenotazione;
 import model.Studente;
 
 import java.io.IOException;
-import java.util.List;
 
 import service.AppelloServiceImpl;
 import service.PrenotazioneService;
